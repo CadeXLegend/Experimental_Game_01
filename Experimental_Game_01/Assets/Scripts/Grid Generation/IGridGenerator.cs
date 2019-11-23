@@ -1,5 +1,5 @@
 ﻿/// <summary>
-/// The Interface for Grid Generators.
+/// Interface for a Basic Grid Generator.
 /// </summary>
 public interface IGridGenerator
 {

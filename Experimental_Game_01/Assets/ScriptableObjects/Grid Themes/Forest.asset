@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: Forest
   m_EditorClassIdentifier: Assembly-CSharp::GridAssetThemes
-  ThemeName: Forest
+  SelectedTheme: 0
   Sprites:
   - {fileID: 21301666, guid: 9afe77e76eb29394bb29beb2eb3cab36, type: 3}
   - {fileID: 21301668, guid: 9afe77e76eb29394bb29beb2eb3cab36, type: 3}
@@ -23,3 +23,5 @@ MonoBehaviour:
   - {fileID: 21301890, guid: 9afe77e76eb29394bb29beb2eb3cab36, type: 3}
   - {fileID: 21301892, guid: 9afe77e76eb29394bb29beb2eb3cab36, type: 3}
   - {fileID: 21301894, guid: 9afe77e76eb29394bb29beb2eb3cab36, type: 3}
+  TileDecorations:
+  - {fileID: 11400000, guid: d134ac19ba26b9746bd489c02f0f6438, type: 2}

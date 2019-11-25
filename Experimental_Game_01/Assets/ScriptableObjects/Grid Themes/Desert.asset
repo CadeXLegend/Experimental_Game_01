@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: Desert
   m_EditorClassIdentifier: Assembly-CSharp::GridAssetThemes
-  selectedTheme: 1
+  SelectedTheme: 0
   Sprites:
   - {fileID: 21302344, guid: 9afe77e76eb29394bb29beb2eb3cab36, type: 3}
   - {fileID: 21302346, guid: 9afe77e76eb29394bb29beb2eb3cab36, type: 3}
@@ -23,3 +23,5 @@ MonoBehaviour:
   - {fileID: 21302562, guid: 9afe77e76eb29394bb29beb2eb3cab36, type: 3}
   - {fileID: 21302564, guid: 9afe77e76eb29394bb29beb2eb3cab36, type: 3}
   - {fileID: 21302566, guid: 9afe77e76eb29394bb29beb2eb3cab36, type: 3}
+  TileDecorations:
+  - {fileID: 11400000, guid: 671c92b08ed50b04a910c78379e15540, type: 2}

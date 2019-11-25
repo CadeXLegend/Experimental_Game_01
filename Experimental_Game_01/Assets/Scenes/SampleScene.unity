@@ -223,7 +223,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 4
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -246,11 +246,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 2.6249268, y: -0.6672699, z: -6.5859375}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1005707598}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &763340624
@@ -284,6 +284,81 @@ Transform:
   - {fileID: 95288962}
   m_Father: {fileID: 0}
   m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &765695089
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 765695090}
+  - component: {fileID: 765695091}
+  m_Layer: 0
+  m_Name: ScreenBoundsFromCamera
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &765695090
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 765695089}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1005707598}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &765695091
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 765695089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51b01b33bb9d40648814876cc802e366, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &1005707597
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1005707598}
+  m_Layer: 0
+  m_Name: ======CAMERAS======
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1005707598
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1005707597}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.6249268, y: 0.6672699, z: -3.4140625}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 519420032}
+  - {fileID: 765695090}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1117482465
 GameObject:
@@ -328,7 +403,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b56681b6ff89c641922ecd2d339f60e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridSize: {x: 0, y: 0}
+  gridSize: {x: 10, y: 8}
 --- !u!1 &1670156145
 GameObject:
   m_ObjectHideFlags: 0
@@ -371,6 +446,7 @@ GameObject:
   - component: {fileID: 1859639351}
   - component: {fileID: 1859639350}
   - component: {fileID: 1859639352}
+  - component: {fileID: 1859639353}
   m_Layer: 0
   m_Name: GridGenerator
   m_TagString: Untagged
@@ -391,7 +467,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gridAssetSpawner: {fileID: 1859639352}
-  gridTheme: 0
+  gridTheme: 2
   gridContainer: {fileID: 1117482467}
   showGridDebugLogs: 0
 --- !u!4 &1859639351
@@ -421,3 +497,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gridAssets: {fileID: 95288961}
+--- !u!114 &1859639353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1859639349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c16066dffdea124fa8ee27f59a326e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  description: "To Generate a Grid, Change the Grid Theme on the Grid Generator Script.
+    \n\nHover over any of the Properties to see their Description!"
+  StartGenerating: 0
+  GenerateOnThemeChanged: 1
+  GenerateOnResolutionChanged: 1
+  GenerateOnOrthoSizeChanged: 0
+  AdjustCameraOrthoSize: 1
+  setCameraOrthoSize: 4
+  lastResolution: {x: 1920, y: 1080}
+  currentResolution: {x: 2732, y: 2048}

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: Eldritch
   m_EditorClassIdentifier: Assembly-CSharp::GridAssetThemes
-  selectedTheme: 2
+  SelectedTheme: 0
   Sprites:
   - {fileID: 21302334, guid: 9afe77e76eb29394bb29beb2eb3cab36, type: 3}
   - {fileID: 21302336, guid: 9afe77e76eb29394bb29beb2eb3cab36, type: 3}
@@ -23,3 +23,5 @@ MonoBehaviour:
   - {fileID: 21302552, guid: 9afe77e76eb29394bb29beb2eb3cab36, type: 3}
   - {fileID: 21302554, guid: 9afe77e76eb29394bb29beb2eb3cab36, type: 3}
   - {fileID: 21302556, guid: 9afe77e76eb29394bb29beb2eb3cab36, type: 3}
+  TileDecorations:
+  - {fileID: 11400000, guid: 7fee27866746a68408e03136b665a8f8, type: 2}

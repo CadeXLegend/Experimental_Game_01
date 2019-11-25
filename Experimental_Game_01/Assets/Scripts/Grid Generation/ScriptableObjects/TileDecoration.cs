@@ -9,5 +9,7 @@ using UnityEngine;
 public class TileDecoration : ScriptableObject
 {
     public Sprite Decoration;
-    private float Height;
+
+    [Range(0.1f, 3f)]
+    public float Size = 1f;
 }

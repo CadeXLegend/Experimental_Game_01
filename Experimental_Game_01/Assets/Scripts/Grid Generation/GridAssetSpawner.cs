@@ -84,6 +84,7 @@ namespace Generation
 #endif
                             SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
                             sr.sprite = gridAssets.Themes[(int)theme].TileDecorations[0].Decoration;
+                            go.transform.localScale *= gridAssets.Themes[(int)theme].TileDecorations[0].Size;
                             sr.sortingOrder = 1;
                             SpawningAssets?.Invoke();
                         }

@@ -19,6 +19,7 @@ namespace Generation
         public event GridGenerationHandler GridGenerated;
 
         private Grid grid;
+        public Grid Grid { get => grid; }
 
         [Header("Grid Information")]
         [SerializeField]
@@ -28,6 +29,7 @@ namespace Generation
         public GridAssetThemes.Theme GridTheme { get => gridTheme; }
         [SerializeField]
         private GridContainer gridContainer;
+        public GridContainer GridContainer { get => gridContainer; }
 
         [Header("Debugging")]
         [SerializeField]
@@ -36,10 +38,12 @@ namespace Generation
         PromisedAction pAction = new PromisedAction();
         private void Start()
         {
-            pAction.ActionFailed += () => {
+            pAction.ActionFailed += () =>
+            {
                 Debug.Log(pAction.ErrorMessage);
             };
-            pAction.ActionSucceeded += () => {
+            pAction.ActionSucceeded += () =>
+            {
                 Debug.Log("<color=blue><b>Grid successfully generated!</b></color>");
             };
             pAction.Call(() => { Generate(); });
@@ -53,8 +57,7 @@ namespace Generation
             gridContainer.AssignedGrid = grid;
             gridContainer.AssignedGridAssets = gridAssetSpawner.GridAssets;
             gridAssetSpawner.SpawnAssets(grid, "Tile", gridContainer.transform, gridTheme);
-            //BoundaryGenerator boundaryGen = new BoundaryGenerator();
-            //boundaryGen.Generate(grid);
+            gridAssetSpawner.SpawnTileDecorations(grid, "Tile Decoration", Tile.PositionOnGrid.Center, gridTheme);
             GridGenerated?.Invoke();
         }
     }

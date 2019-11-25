@@ -6,7 +6,7 @@ namespace Generation
     /// <summary>
     /// A Generic Grid Generator.
     /// </summary>
-    public class GridGenerator : MonoBehaviour, IGridGenerator
+    public class GridGenerator : MonoBehaviour, IGenerator
     {
         public delegate void GridGenerationHandler();
         /// <summary>
@@ -19,12 +19,17 @@ namespace Generation
         public event GridGenerationHandler GridGenerated;
 
         private Grid grid;
+
+        [Header("Grid Information")]
         [SerializeField]
         private GridAssetSpawner gridAssetSpawner;
-
         [SerializeField]
-        private Transform gridContainer;
+        private GridAssetThemes.Theme gridTheme = GridAssetThemes.Theme.Forest;
+        public GridAssetThemes.Theme GridTheme { get => gridTheme; }
+        [SerializeField]
+        private GridContainer gridContainer;
 
+        [Header("Debugging")]
         [SerializeField]
         private bool showGridDebugLogs;
 
@@ -43,8 +48,13 @@ namespace Generation
         public virtual void Generate()
         {
             GridGenerating?.Invoke();
-            grid = new Grid((int)Camera.main.orthographicSize, Screen.width, Screen.height, showGridDebugLogs);
-            gridAssetSpawner.SpawnAssets(grid, "Tile", gridContainer);
+            grid = new Grid((int)Camera.main.orthographicSize, Screen.width, Screen.height, showGridDebugLogs, gridContainer);
+            gridContainer.gridSize = new Vector2(grid.Columns, grid.Rows);
+            gridContainer.AssignedGrid = grid;
+            gridContainer.AssignedGridAssets = gridAssetSpawner.GridAssets;
+            gridAssetSpawner.SpawnAssets(grid, "Tile", gridContainer.transform, gridTheme);
+            //BoundaryGenerator boundaryGen = new BoundaryGenerator();
+            //boundaryGen.Generate(grid);
             GridGenerated?.Invoke();
         }
     }

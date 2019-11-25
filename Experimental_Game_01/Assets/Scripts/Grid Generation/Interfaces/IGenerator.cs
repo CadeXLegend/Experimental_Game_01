@@ -1,7 +1,7 @@
 ﻿/// <summary>
 /// Interface for a Basic Grid Generator.
 /// </summary>
-public interface IGridGenerator
+public interface IGenerator
 {
     void Generate();
 }

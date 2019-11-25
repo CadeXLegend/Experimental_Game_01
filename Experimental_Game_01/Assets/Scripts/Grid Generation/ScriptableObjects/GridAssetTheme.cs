@@ -16,8 +16,9 @@ public class GridAssetThemes : ScriptableObject
     }
 
     [Header("Theme Information")]
-    public Theme selectedTheme;
+    public Theme SelectedTheme;
 
     [Header("Theme Data")]
     public Sprite[] Sprites = new Sprite[9];
+    public TileDecoration[] TileDecorations;
 }

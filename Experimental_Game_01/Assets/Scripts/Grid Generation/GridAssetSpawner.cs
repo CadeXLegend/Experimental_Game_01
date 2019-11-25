@@ -58,5 +58,39 @@ namespace Generation
             }
             AssetsSpawned?.Invoke();
         }
+
+        /// <summary>
+        /// Spawn tile decorations onto certain generated tiles as per parameters.
+        /// </summary>
+        /// <param name="grid">Data Object containing Grid information and functionality.</param>
+        /// <param name="assetName">Name for each generated asset</param>
+        /// <param name="gridContainer">Parent for the instantiated assets</param>
+        public void SpawnTileDecorations(Grid grid, string assetName, Tile.PositionOnGrid positionOnGrid, GridAssetThemes.Theme theme, float spawnRate = 0.1f)
+        {
+            for (int column = 0; column < grid.Columns; ++column)
+            {
+                for (int row = 0; row < grid.Rows; ++row)
+                {
+                    Tile t = grid.TileGrid[column, row];
+                    if (t.TilePositionOnGrid == positionOnGrid)
+                    {
+                        if (!(Random.Range(0.0f, 1.0f) > spawnRate))
+                        {
+                            Vector3 position = grid.CoordinatesToWorldPosition(column, row);
+                            GameObject go = Instantiate(gridAssets.AssetPrefab, position, Quaternion.identity, t.transform);
+#if UNITY_EDITOR
+                            //don't need to do this in build
+                            go.name = $"{assetName} (X: {column}  Y:{row})";
+#endif
+                            SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
+                            sr.sprite = gridAssets.Themes[(int)theme].TileDecorations[0].Decoration;
+                            sr.sortingOrder = 1;
+                            SpawningAssets?.Invoke();
+                        }
+                    }
+                }
+            }
+            AssetsSpawned?.Invoke();
+        }
     }
 }

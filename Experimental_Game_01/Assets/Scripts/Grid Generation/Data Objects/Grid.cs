@@ -54,7 +54,8 @@ namespace Generation
                 {
                     Vector2 coordinatesOnGrid = new Vector2(column, row);
                     Tile.PositionOnGrid tpOnG = SetupTilePositionsOnGrid(coordinatesOnGrid);
-                    TileGrid[column, row] = new Tile(tpOnG, coordinatesOnGrid);
+                    TileGrid[column, row] = new Tile();
+                    TileGrid[column, row].Init(tpOnG, coordinatesOnGrid);
                     Tile t = TileGrid[column, row];
 
                     if (t.TilePositionOnGrid == Tile.PositionOnGrid.TopLeftCorner) GridCorners.Add(t);
@@ -109,15 +110,22 @@ namespace Generation
                 }
             }
         }
+
         /// <summary>
         /// Swaps the current Tile Theme to whichever theme you give it.  Warning:  This will change the Tile's Sprites.
         /// </summary>
         /// <param name="theme">The Tile Theme you wish to activate.</param>
-        public virtual void HotSwapTileTheme(GridAssetThemes.Theme theme)
+        public virtual void HotSwapTileTheme(GridAssetTheme.Theme theme)
         {
             foreach (Tile t in TileGrid)
             {
                 t.spriteRenderer.sprite = Container.AssignedGridAssets.Themes[(int)theme].Sprites[(int)t.TilePositionOnGrid];
+                if(t.transform.childCount > 0)
+                    for(int i = 0; i < t.transform.childCount; ++i)
+                    {
+                        SpriteRenderer r = t.transform.GetChild(i).GetComponent<SpriteRenderer>();
+                        r.sprite = Container.AssignedGridAssets.Themes[(int)theme].TileDecorations[0].Sprite;
+                    }                       
             }
         }
 

@@ -23,10 +23,10 @@ namespace Generation
 
         [Header("Grid Information")]
         [SerializeField]
-        private GridAssetSpawner gridAssetSpawner;
+        private GridAssetSpawner spawner;
         [SerializeField]
-        private GridAssetThemes.Theme gridTheme = GridAssetThemes.Theme.Forest;
-        public GridAssetThemes.Theme GridTheme { get => gridTheme; }
+        private GridAssetTheme.Theme gridTheme;
+        public GridAssetTheme.Theme GridTheme { get => gridTheme; }
         [SerializeField]
         private GridContainer gridContainer;
         public GridContainer GridContainer { get => gridContainer; }
@@ -35,29 +35,38 @@ namespace Generation
         [SerializeField]
         private bool showGridDebugLogs;
 
-        PromisedAction pAction = new PromisedAction();
-        private void Start()
+        public void Init(GridAssetTheme.Theme theme)
         {
-            pAction.ActionFailed += () =>
-            {
-                Debug.Log(pAction.ErrorMessage);
-            };
-            pAction.ActionSucceeded += () =>
-            {
-                Debug.Log("<color=blue><b>Grid successfully generated!</b></color>");
-            };
-            pAction.Call(() => { Generate(); });
+            gridTheme = theme;
+        }
+
+        public void Init(GridAssetSpawner _spawner, GridContainer container)
+        {
+            spawner = _spawner;
+            gridContainer = container;
+        }
+
+        public void Init(GridAssetSpawner _spawner, GridContainer container, GridAssetTheme.Theme theme)
+        {
+            spawner = _spawner;
+            gridContainer = container;
+            gridTheme = theme;
         }
 
         public virtual void Generate()
         {
+            if (GridContainer == null)
+                throw new UnassignedReferenceException($"Grid Container is not assigned (on {this.name})");
+            if (spawner == null)
+                throw new UnassignedReferenceException($"Grid Asset Spawner is not assigned (on {this.name})");
+
             GridGenerating?.Invoke();
             grid = new Grid((int)Camera.main.orthographicSize, Screen.width, Screen.height, showGridDebugLogs, gridContainer);
             gridContainer.gridSize = new Vector2(grid.Columns, grid.Rows);
             gridContainer.AssignedGrid = grid;
-            gridContainer.AssignedGridAssets = gridAssetSpawner.GridAssets;
-            gridAssetSpawner.SpawnAssets(grid, "Tile", gridContainer.transform, gridTheme);
-            gridAssetSpawner.SpawnTileDecorations(grid, "Tile Decoration", Tile.PositionOnGrid.Center, gridTheme);
+            gridContainer.AssignedGridAssets = spawner.GridAssets;
+            spawner.SpawnAssets(grid, "Tile", gridContainer.transform, gridTheme);
+            spawner.SpawnTileDecorations(grid, "Tile Decoration", Tile.PositionOnGrid.Center, gridTheme);
             GridGenerated?.Invoke();
         }
     }

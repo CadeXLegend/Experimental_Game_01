@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 3f93f30c9e0be084e9a6cf1256211a20, type: 3}
   m_Name: Desert
-  m_EditorClassIdentifier: Assembly-CSharp::GridAssetThemes
-  SelectedTheme: 0
+  m_EditorClassIdentifier: GameScripts::GridAssetThemes
+  SelectedTheme: 1
   Sprites:
   - {fileID: 21302344, guid: 9afe77e76eb29394bb29beb2eb3cab36, type: 3}
   - {fileID: 21302346, guid: 9afe77e76eb29394bb29beb2eb3cab36, type: 3}

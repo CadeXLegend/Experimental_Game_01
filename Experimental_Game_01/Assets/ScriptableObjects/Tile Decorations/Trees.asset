@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef8059ff40f627047abe8f6479f38d94, type: 3}
   m_Name: Trees
   m_EditorClassIdentifier: 
-  Decoration: {fileID: 21301028, guid: 9afe77e76eb29394bb29beb2eb3cab36, type: 3}
+  Sprite: {fileID: 21301028, guid: 9afe77e76eb29394bb29beb2eb3cab36, type: 3}
+  Size: 1

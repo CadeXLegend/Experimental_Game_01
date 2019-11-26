@@ -23,10 +23,16 @@ namespace Generation
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 themeCycleCounter = themeCycleCounter < AssignedGridAssets.Themes.Length - 1 ? themeCycleCounter + 1 : 0;
-                GridAssetThemes.Theme currentTheme = (GridAssetThemes.Theme)themeCycleCounter;
+                GridAssetTheme.Theme currentTheme = (GridAssetTheme.Theme)themeCycleCounter;
                 AssignedGrid.HotSwapTileTheme(currentTheme);
             }
         }
         #endregion
+
+        public virtual void ClearGrid()
+        {
+            foreach (Transform t in transform)
+                Destroy(t.gameObject);
+        }
     }
 }

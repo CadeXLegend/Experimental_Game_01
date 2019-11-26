@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CoverageReport scope="Summary">
+  <Summary>
+    <Generatedon>11/27/2019 - 1:30:33 AM</Generatedon>
+    <Parser>MultiReportParser (32x CoberturaParser, 2x OpenCoverParser)</Parser>
+    <Assemblies>2</Assemblies>
+    <Classes>22</Classes>
+    <Files>19</Files>
+    <Coveredlines>325</Coveredlines>
+    <Uncoveredlines>126</Uncoveredlines>
+    <Coverablelines>451</Coverablelines>
+    <Totallines>1027</Totallines>
+    <Linecoverage>72</Linecoverage>
+    <Coveredbranches>0</Coveredbranches>
+    <Totalbranches>0</Totalbranches>
+  </Summary>
+  <Coverage>
+    <Assembly name="GameScripts" classes="13" coverage="69.2" coveredlines="218" coverablelines="315" totallines="764" branchcoverage="" coveredbranches="0" totalbranches="0">
+      <Class name="Agent.MoverFromInput" coverage="94.7" coveredlines="18" coverablelines="19" totallines="54" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="CustomExtensions.Bounds.ScreenEdgeColliders" coverage="83.3" coveredlines="15" coverablelines="18" totallines="36" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="CustomExtensions.PromisedAction" coverage="0" coveredlines="0" coverablelines="19" totallines="68" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="Generation.GenerateGridInEditor" coverage="30.5" coveredlines="18" coverablelines="59" totallines="125" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="Generation.Grid" coverage="78.9" coveredlines="60" coverablelines="76" totallines="136" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="Generation.GridAssets" coverage="100" coveredlines="6" coverablelines="6" totallines="23" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="Generation.GridAssetSpawner" coverage="96.6" coveredlines="57" coverablelines="59" totallines="114" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="Generation.GridContainer" coverage="27.2" coveredlines="3" coverablelines="11" totallines="32" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="Generation.GridGenerator" coverage="82.8" coveredlines="29" coverablelines="35" totallines="73" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="Generation.Tile" coverage="100" coveredlines="10" coverablelines="10" totallines="44" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="GridAssetTheme" coverage="100" coveredlines="1" coverablelines="1" totallines="22" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="GridAssetThemes" coverage="0" coveredlines="0" coverablelines="1" totallines="22" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="TileDecoration" coverage="100" coveredlines="1" coverablelines="1" totallines="15" branchcoverage="" coveredbranches="0" totalbranches="0" />
+    </Assembly>
+    <Assembly name="Tests" classes="9" coverage="78.6" coveredlines="107" coverablelines="136" totallines="405" branchcoverage="" coveredbranches="0" totalbranches="0">
+      <Class name="GridAssetSpawnerTests" coverage="0" coveredlines="0" coverablelines="4" totallines="59" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="GridTests" coverage="0" coveredlines="0" coverablelines="4" totallines="61" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="PromisedActionTests" coverage="0" coveredlines="0" coverablelines="4" totallines="18" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="Tests.GridAssetSpawnerTests" coverage="100" coveredlines="30" coverablelines="30" totallines="59" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="Tests.GridGeneratorTests" coverage="100" coveredlines="48" coverablelines="48" totallines="99" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="Tests.GridTests" coverage="57.1" coveredlines="16" coverablelines="28" totallines="61" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="Tests.MapGeneratorTest" coverage="0" coveredlines="0" coverablelines="5" totallines="0" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="Tests.ScreenEdgeCollidersTests" coverage="100" coveredlines="5" coverablelines="5" totallines="22" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="Tests.TileTests" coverage="100" coveredlines="8" coverablelines="8" totallines="26" branchcoverage="" coveredbranches="0" totalbranches="0" />
+    </Assembly>
+  </Coverage>
+</CoverageReport>

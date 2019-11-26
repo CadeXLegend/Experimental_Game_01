@@ -1,5 +1,5 @@
 # Experimental Game 01 
-[![Line Coverage](https://github.com/CadeXLegend/Experimental_Game_01/blob/master/Experimental_Game_01/CodeCoverage/Report/badge_linecoverage.svg)
+![Line Coverage](https://github.com/CadeXLegend/Experimental_Game_01/blob/master/Experimental_Game_01/CodeCoverage/Report/badge_linecoverage.svg)
 
 Creating a game to experiment with new code techniques, and all that.
 

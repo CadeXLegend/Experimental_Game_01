@@ -44,7 +44,7 @@ namespace Generation
         [ReadOnly]
         private Vector2 currentResolution;
 
-        private GridAssetThemes.Theme lastGridTheme;
+        private GridAssetTheme.Theme lastGridTheme;
         private int lastOrthoSize;
         private void Awake()
         {

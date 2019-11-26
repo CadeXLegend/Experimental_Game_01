@@ -8,7 +8,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Tile Decoration", menuName ="Grid/Tile Decoration", order = 0)]
 public class TileDecoration : ScriptableObject
 {
-    public Sprite Decoration;
+    public Sprite Sprite;
 
     [Range(0.1f, 3f)]
     public float Size = 1f;

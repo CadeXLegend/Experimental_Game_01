@@ -1,12 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// ScriptableObject containing Sprites to be applied to a Grid.
 /// </summary>
 [CreateAssetMenu(fileName = "New Grid Asset Theme", menuName = "Grid/Theme", order = 0)]
-public class GridAssetThemes : ScriptableObject
+public class GridAssetTheme : ScriptableObject
 {
     public enum Theme
     {

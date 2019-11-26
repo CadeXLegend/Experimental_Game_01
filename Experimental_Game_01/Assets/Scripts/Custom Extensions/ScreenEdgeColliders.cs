@@ -11,12 +11,12 @@ namespace CustomExtensions.Bounds
             AddCollider();
         }
 
-        protected virtual void AddCollider()
+        public virtual EdgeCollider2D AddCollider()
         {
-            if (Camera.main == null) { Debug.LogError("Camera.main not found, failed to create edge colliders"); return; }
+            if (Camera.main == null) { Debug.LogError("Camera.main not found, failed to create edge colliders"); return null; }
 
             Camera cam = Camera.main;
-            if (!cam.orthographic) { Debug.LogError("Camera.main is not Orthographic, failed to create edge colliders"); return; }
+            if (!cam.orthographic) { Debug.LogError("Camera.main is not Orthographic, failed to create edge colliders"); return null; }
 
             transform.position = Camera.main.transform.position;
             Vector2 bottomLeft = cam.ScreenToWorldPoint(new Vector3(0, 0, cam.nearClipPlane));
@@ -30,6 +30,7 @@ namespace CustomExtensions.Bounds
             Vector2[] edgePoints = new[] { bottomLeft, topLeft, topRight, bottomRight, bottomLeft };
             edge.points = edgePoints;
             edge.edgeRadius = 0.2f;
+            return edge;
         }
     }
 }

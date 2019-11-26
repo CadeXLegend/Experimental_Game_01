@@ -23,13 +23,18 @@ namespace Generation
         private GridAssets gridAssets;
         public GridAssets GridAssets { get => gridAssets; }
 
+        public void Init(GridAssets _gridAssets)
+        {
+            gridAssets = _gridAssets;
+        }
+
         /// <summary>
         /// Spawn assets into the scene based on the parameters received.
         /// </summary>
         /// <param name="grid">Data Object containing Grid information and functionality.</param>
         /// <param name="assetName">Name for each generated asset</param>
         /// <param name="gridContainer">Parent for the instantiated assets</param>
-        public void SpawnAssets(Grid grid, string assetName, Transform gridContainer, GridAssetThemes.Theme theme)
+        public void SpawnAssets(Grid grid, string assetName, Transform gridContainer, GridAssetTheme.Theme theme)
         {
             for (int column = 0; column < grid.Columns; ++column)
             {
@@ -52,7 +57,19 @@ namespace Generation
                     goT.spriteRenderer = goT.GetComponent<SpriteRenderer>();
                     grid.TileGrid[column, row] = goT;
                     //transpose ends here ^
-                    sr.sprite = gridAssets.Themes[(int)theme].Sprites[(int)t.TilePositionOnGrid];
+                    #region Error Handling
+                    GridAssetTheme[] themes = gridAssets.Themes;
+                    if(themes[(int)theme] == null)
+                        throw new System.Exception($"The {theme.ToString()} (attached to: {this.name}) is null!");
+                    Sprite[] sprites = themes[(int)theme].Sprites;
+                    if (sprites == null|| sprites.Length < 1)
+                        throw new System.Exception($"There must be Sprites assigned to the GridAssets Themes (called from: {this.name})");
+                    if ((int)t.TilePositionOnGrid > sprites.Length - 1)
+                        throw new System.Exception($"You need at least 9 Sprites for a Theme to fill out every Tile's Position! (called from: {this.name})");
+                    if(sprites[(int)t.TilePositionOnGrid] == null)
+                        throw new System.Exception($"The Sprite meant for tile at position: {t.TilePositionOnGrid.ToString()} (attached to: {this.name}) is null!");
+                    #endregion
+                    sr.sprite = sprites[(int)t.TilePositionOnGrid];
                     SpawningAssets?.Invoke();
                 }
             }
@@ -65,7 +82,7 @@ namespace Generation
         /// <param name="grid">Data Object containing Grid information and functionality.</param>
         /// <param name="assetName">Name for each generated asset</param>
         /// <param name="gridContainer">Parent for the instantiated assets</param>
-        public void SpawnTileDecorations(Grid grid, string assetName, Tile.PositionOnGrid positionOnGrid, GridAssetThemes.Theme theme, float spawnRate = 0.1f)
+        public void SpawnTileDecorations(Grid grid, string assetName, Tile.PositionOnGrid positionOnGrid, GridAssetTheme.Theme theme, float spawnRate = 0.1f)
         {
             for (int column = 0; column < grid.Columns; ++column)
             {
@@ -83,7 +100,7 @@ namespace Generation
                             go.name = $"{assetName} (X: {column}  Y:{row})";
 #endif
                             SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
-                            sr.sprite = gridAssets.Themes[(int)theme].TileDecorations[0].Decoration;
+                            sr.sprite = gridAssets.Themes[(int)theme].TileDecorations[0].Sprite;
                             go.transform.localScale *= gridAssets.Themes[(int)theme].TileDecorations[0].Size;
                             sr.sortingOrder = 1;
                             SpawningAssets?.Invoke();

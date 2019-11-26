@@ -11,7 +11,13 @@ namespace Generation
         private GameObject assetPrefab;
         public GameObject AssetPrefab { get => assetPrefab; }
         [SerializeField]
-        private GridAssetThemes[] themes;
-        public GridAssetThemes[] Themes { get => themes; }
+        private GridAssetTheme[] themes;
+        public GridAssetTheme[] Themes { get => themes; }
+
+        public void Init(GameObject _assetPrefab, GridAssetTheme[] _themes)
+        {
+            assetPrefab = _assetPrefab;
+            themes = _themes;
+        }
     }
 }

@@ -1,6 +1,6 @@
 # Experimental Game 01 
 ![Line Coverage](https://github.com/CadeXLegend/Experimental_Game_01/blob/master/Experimental_Game_01/CodeCoverage/Report/badge_linecoverage.svg)
-![platform](https://img.shields.io/badge/Platform-Win--64-lightgrey.svg)
+![platform](https://img.shields.io/badge/Platform-Win--64-blue)
 ![engine](https://img.shields.io/badge/Engine-Unity%202019.3-orange)
 ![language](https://img.shields.io/badge/Language-C%23-blueviolet)
 

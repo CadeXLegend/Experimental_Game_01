@@ -31,15 +31,11 @@ namespace Generation
 
         public SpriteRenderer spriteRenderer { get; set; }
 
-        public Tile()
-        {
-            //default initialization
-        }
-        public Tile(PositionOnGrid _TilePositionOnGrid)
+        public void Init(PositionOnGrid _TilePositionOnGrid)
         {
             TilePositionOnGrid = _TilePositionOnGrid;
         }
-        public Tile(PositionOnGrid _TilePositionOnGrid, Vector2 _CoordinatesOnGrid)
+        public void Init(PositionOnGrid _TilePositionOnGrid, Vector2 _CoordinatesOnGrid)
         {
             TilePositionOnGrid = _TilePositionOnGrid;
             CoordinatesOnGrid = _CoordinatesOnGrid;

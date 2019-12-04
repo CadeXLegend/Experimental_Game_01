@@ -16,7 +16,7 @@ namespace Tests
         {
             #region Arrange
             // Use the Assert class to test conditions
-            GridGenerator generator = new GameObject().AddComponent<GridGenerator>();
+            MapGenerator generator = new GameObject().AddComponent<MapGenerator>();
             GridAssetSpawner spawner = new GameObject().AddComponent<GridAssetSpawner>();
             generator.Init(spawner, null);
             #endregion
@@ -35,7 +35,7 @@ namespace Tests
         {
             #region Arrange
             // Use the Assert class to test conditions
-            GridGenerator generator = new GameObject().AddComponent<GridGenerator>();
+            MapGenerator generator = new GameObject().AddComponent<MapGenerator>();
             GridContainer container = new GameObject().AddComponent<GridContainer>();
             generator.Init(null, container);
             #endregion
@@ -54,11 +54,11 @@ namespace Tests
         {
             #region Arrange
             // Use the Assert class to test conditions
-            GridGenerator generator = new GameObject().AddComponent<GridGenerator>();
+            MapGenerator generator = new GameObject().AddComponent<MapGenerator>();
             generator.Init(null, null, GridAssetTheme.Theme.Desert);
             #endregion
 
-            Assert.AreEqual(generator.GridTheme, GridAssetTheme.Theme.Desert);
+            Assert.AreEqual(generator.MapTheme, GridAssetTheme.Theme.Desert);
         }
 
         [Test]
@@ -82,12 +82,12 @@ namespace Tests
             GridAssetSpawner spawner = new GameObject().AddComponent<GridAssetSpawner>();
             spawner.Init(assets);
             GridContainer container = new GameObject().AddComponent<GridContainer>();
-            GridGenerator generator = new GameObject().AddComponent<GridGenerator>();
+            MapGenerator generator = new GameObject().AddComponent<MapGenerator>();
             generator.Init(spawner, container, 0);
             bool gridGenerating = false;
             bool gridGenerated = false;
-            generator.GridGenerating += () => { gridGenerating = true; };
-            generator.GridGenerated += () => { gridGenerated = true; };
+            generator.MapGenerating += () => { gridGenerating = true; };
+            generator.MapGenerated += () => { gridGenerated = true; };
             #endregion
 
             Assert.DoesNotThrow(() => generator.Generate());

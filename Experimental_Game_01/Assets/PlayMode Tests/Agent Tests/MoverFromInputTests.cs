@@ -27,6 +27,12 @@ namespace Tests
             mover.Move(new Vector2(5, 5));
             yield return new WaitForSeconds(1f);
             Assert.That((Vector2)go.transform.position != Vector2.zero);
+
+            go.transform.position = Vector2.zero;
+            go.GetComponent<Rigidbody2D>().AddForce(new Vector2(5, 5));
+            yield return new WaitForSeconds(1f);
+            Assert.That((Vector2)go.transform.position != Vector2.zero);
+            Debug.Log(go.transform.position);
         }
     }
 }

@@ -3,11 +3,11 @@ using UnityEngine;
 
 namespace Generation
 {
-    [RequireComponent(typeof(GridGenerator))]
+    [RequireComponent(typeof(MapGenerator))]
     [ExecuteInEditMode]
     public class GenerateGridInEditor : MonoBehaviour
     {
-        GridGenerator generator;
+        MapGenerator generator;
         PromisedAction pAction = new PromisedAction();
 
         [Header("How To Use:")]
@@ -48,7 +48,7 @@ namespace Generation
         private int lastOrthoSize;
         private void Awake()
         {
-            generator = GetComponent<GridGenerator>();
+            generator = GetComponent<MapGenerator>();
             lastResolution = new Vector2(Screen.currentResolution.width, Screen.currentResolution.height);
             lastOrthoSize = (int)Camera.main.orthographicSize;
             CleanScene();
@@ -79,7 +79,7 @@ namespace Generation
             if (GenerateOnThemeChanged)
             {
                 //if you've changed the theme
-                if (generator.GridTheme != lastGridTheme)
+                if (generator.MapTheme != lastGridTheme)
                 {
                     RunMapGenerationInEditor();
                 }
@@ -100,7 +100,7 @@ namespace Generation
         {
             CleanScene();
             //update the last theme to be the current selected one in the inspector window
-            lastGridTheme = generator.GridTheme;
+            lastGridTheme = generator.MapTheme;
             //let's assign some logging n all that
             pAction.ActionFailed += () =>
             {
@@ -116,9 +116,9 @@ namespace Generation
 
         private void CleanScene()
         {
-            while (generator.GridContainer.transform.childCount > 0)
+            while (generator.MapContainer.transform.childCount > 0)
             {
-                DestroyImmediate(generator.GridContainer.transform.GetChild(0).gameObject);
+                DestroyImmediate(generator.MapContainer.transform.GetChild(0).gameObject);
             }
         }
     }

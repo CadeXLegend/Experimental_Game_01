@@ -29,7 +29,7 @@ namespace CustomExtensions.Bounds
 
             Vector2[] edgePoints = new[] { bottomLeft, topLeft, topRight, bottomRight, bottomLeft };
             edge.points = edgePoints;
-            edge.edgeRadius = 0.2f;
+            edge.edgeRadius = 0.5f;
             return edge;
         }
     }

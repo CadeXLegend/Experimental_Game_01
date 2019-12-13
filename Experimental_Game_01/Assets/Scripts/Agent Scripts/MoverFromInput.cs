@@ -33,6 +33,40 @@ namespace Agent
             movementSpeed = agentConfiguration.MovementSpeed;
         }
 
+        int counter = 0;
+        float timer = 0.5f;
+        bool isCounting = false;
+        private void Update()
+        {
+            if (timer <= 0)
+            {
+                counter = 0;
+                timer = 0.5f;
+                isCounting = false;
+            }
+
+            if (Input.GetKeyDown(KeyCode.E))
+               counter++;
+
+            if (counter == 2 &&  Input.GetKeyUp(KeyCode.E))
+            {
+                isCounting = false;
+                counter = 0;
+                timer = 0.5f;
+            }
+
+            if (counter > 0 && counter < 2)
+                timer -= Time.deltaTime;        
+
+            if(counter == 2)
+            {
+                isCounting = true;
+            }
+
+            if (isCounting)
+                Debug.Log(1);
+        }
+
         // Update is called once per frame
         private void FixedUpdate()
         {

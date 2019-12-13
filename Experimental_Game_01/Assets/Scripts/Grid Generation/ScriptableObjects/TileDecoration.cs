@@ -11,5 +11,7 @@ public class TileDecoration : ScriptableObject
     public Sprite Sprite;
 
     [Range(0.1f, 3f)]
-    public float Size = 1f;
+    public float SpriteScale = 1f;
+
+    public Vector2 ColliderSize = new Vector2(1f, 1f);
 }

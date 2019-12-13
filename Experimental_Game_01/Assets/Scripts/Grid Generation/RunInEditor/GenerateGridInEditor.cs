@@ -1,5 +1,6 @@
 ﻿using CustomExtensions;
 using UnityEngine;
+using MyBox;
 
 namespace Generation
 {
@@ -10,29 +11,22 @@ namespace Generation
         MapGenerator generator;
         PromisedAction pAction = new PromisedAction();
 
-        [Header("How To Use:")]
-        [SerializeField]
-        [TextArea(5, 10)]
-        private string description = "To Generate a Grid, Change the Grid Theme on the Grid Generator Script. \n\nHover over any of the Properties to see their Description!";
-        [SerializeField]
-        [Tooltip("Let's start Generating Grids!")]
-        private bool StartGenerating = false;
-
         [Header("Custom Parameters")]
-        [SerializeField]
+        [SerializeField, Tooltip("If you want the Grid to Automatically Generate on the below Parameters")]
+        private bool autoGenerate = false;
+        [SerializeField, ConditionalField("autoGenerate", false, true)]
         [Tooltip("Generate the Grid when the Theme is Changed")]
         private bool GenerateOnThemeChanged;
-        [SerializeField]
+        [SerializeField, ConditionalField("autoGenerate", false, true)]
         [Tooltip("Generate the Grid when the Resolution is Changed")]
         private bool GenerateOnResolutionChanged;
-        [SerializeField]
+        [SerializeField, ConditionalField("autoGenerate", false, true)]
         [Tooltip("Generate the Camera's Orthographic Size is Changed")]
         private bool GenerateOnOrthoSizeChanged;
-        [SerializeField]
+        [SerializeField, ConditionalField("autoGenerate", false, true)]
         [Tooltip("Whether to adjust the Camera's Orthographic Size using the SetCameraOrthoSize parameter below this")]
         private bool AdjustCameraOrthoSize;
-        [SerializeField]
-        [Range(1f, 20f)]
+        [SerializeField, Range(1f, 20f), ConditionalField("AdjustCameraOrthoSize", false, true)]
         [Tooltip("This changes the Main Camera's Orthographic Size according to the Slider's value")]
         private int setCameraOrthoSize;
 
@@ -51,8 +45,8 @@ namespace Generation
             generator = GetComponent<MapGenerator>();
             lastResolution = new Vector2(Screen.currentResolution.width, Screen.currentResolution.height);
             lastOrthoSize = (int)Camera.main.orthographicSize;
-            CleanScene();
-            StartGenerating = false;
+            ClearGrid();
+            autoGenerate = false;
         }
 
         private void Update()
@@ -61,7 +55,7 @@ namespace Generation
             if (Application.isPlaying)
                 return;
 
-            if (!StartGenerating)
+            if (!autoGenerate)
                 return;
 
             if (AdjustCameraOrthoSize)
@@ -71,7 +65,7 @@ namespace Generation
                 if (Camera.main.orthographicSize != lastOrthoSize)
                 {
                     lastOrthoSize = (int)Camera.main.orthographicSize;
-                    RunMapGenerationInEditor();
+                    RunMapGeneratorInEditor();
                 }
 
             currentResolution = new Vector2(Screen.width, Screen.height);
@@ -81,7 +75,7 @@ namespace Generation
                 //if you've changed the theme
                 if (generator.MapTheme != lastGridTheme)
                 {
-                    RunMapGenerationInEditor();
+                    RunMapGeneratorInEditor();
                 }
             }
 
@@ -91,14 +85,15 @@ namespace Generation
                 if (currentResolution != lastResolution)
                 {
                     lastResolution = currentResolution;
-                    RunMapGenerationInEditor();
+                    RunMapGeneratorInEditor();
                 }
             }
         }
 
-        private void RunMapGenerationInEditor()
+        [ButtonMethod]
+        private void RunMapGeneratorInEditor()
         {
-            CleanScene();
+            ClearGrid();
             //update the last theme to be the current selected one in the inspector window
             lastGridTheme = generator.MapTheme;
             //let's assign some logging n all that
@@ -114,8 +109,12 @@ namespace Generation
             pAction.Call(() => { generator.Generate(); });
         }
 
-        private void CleanScene()
+        [ButtonMethod]
+        private void ClearGrid()
         {
+            if (generator == null)
+                return;
+
             while (generator.MapContainer.transform.childCount > 0)
             {
                 DestroyImmediate(generator.MapContainer.transform.GetChild(0).gameObject);

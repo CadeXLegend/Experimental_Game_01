@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using MyBox;
+using UnityEngine;
 
 namespace Agent
 {
@@ -30,11 +31,33 @@ namespace Agent
         /// </summary>
         [Tooltip("The localScale of the Agent.")]
         public Vector2 AgentSize;
+
+        [Header("Agent Stats")]
+        /// <summary>
+        /// Whether or not to set stats like Health, Attack, etc for this Agent.
+        /// </summary>
+        [Tooltip("Whether or not to set stats like Health, Attack, etc for this Agent.")]
+        [SerializeField]
+        private bool useAgentStats;
         /// <summary>
         /// The rate at which the Agent will move.
         /// </summary>
         [Tooltip("The rate at which the Agent will move.")]
         public float MovementSpeed;
-
+        /// <summary>
+        /// The Maximum Health an Agent will start with.
+        /// </summary>
+        [Tooltip("The Maximum Health an Agent will start with.")]
+        public int Health;
+        /// <summary>
+        /// The base Attack an Agent will start with.
+        /// </summary>
+        [Tooltip("The base Attack an Agent will start with.")]
+        public int Attack;
+        /// <summary>
+        /// The base Attack Range an Agent will start with
+        /// </summary>
+        [Tooltip("The base Attack Range an Agent will start with.")]
+        public int AttackRange;
     }
 }

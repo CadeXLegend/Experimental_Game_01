@@ -59,25 +59,22 @@ namespace Generation
                 Debug.Log($"<b>Grid Debug</b>Tiles Generated: {Columns * Rows}\nColumns: {Columns}\nRows: {Rows}");
         }
 
-    private void AssignCoordinatesAndPositionsToTiles()
+        private void AssignCoordinatesAndPositionsToTiles()
         {
-            for (int column = 0; column < Columns; ++column)
+            Array.ForEach(TileGrid, (column, row) =>
             {
-                for (int row = 0; row < Rows; ++row)
-                {
-                    Vector2 coordinatesOnGrid = new Vector2(column, row);
-                    Tile.PositionOnGrid tpOnG = SetupTilePositionsOnGrid(coordinatesOnGrid);
-                    TileGrid[column, row] = new Tile();
-                    TileGrid[column, row].Init(tpOnG, coordinatesOnGrid);
-                    Tile t = TileGrid[column, row];
+                Vector2 coordinatesOnGrid = new Vector2(column, row);
+                Tile.PositionOnGrid tpOnG = SetupTilePositionsOnGrid(coordinatesOnGrid);
+                TileGrid[column, row] = new Tile();
+                TileGrid[column, row].Init(tpOnG, coordinatesOnGrid);
+                Tile t = TileGrid[column, row];
 
-                    if (t.TilePositionOnGrid == Tile.PositionOnGrid.TopLeftCorner) GridCorners.Add(t);
-                    if (t.TilePositionOnGrid == Tile.PositionOnGrid.BottomLeftCorner) GridCorners.Add(t);
-                    if (t.TilePositionOnGrid == Tile.PositionOnGrid.TopRightCorner) GridCorners.Add(t);
-                    if (t.TilePositionOnGrid == Tile.PositionOnGrid.BottomRightCorner) GridCorners.Add(t);
-                }
-            }
-        }        
+                if (t.TilePositionOnGrid == Tile.PositionOnGrid.TopLeftCorner) GridCorners.Add(t);
+                if (t.TilePositionOnGrid == Tile.PositionOnGrid.BottomLeftCorner) GridCorners.Add(t);
+                if (t.TilePositionOnGrid == Tile.PositionOnGrid.TopRightCorner) GridCorners.Add(t);
+                if (t.TilePositionOnGrid == Tile.PositionOnGrid.BottomRightCorner) GridCorners.Add(t);                             
+            });
+        }
 
         /// <summary>
         /// Sets up the reference for the Tile's position on the Grid.
@@ -115,11 +112,12 @@ namespace Generation
         /// <param name="PositionToHighlight">The Position of the Grid which you want to have Highlighted.</param>
         public virtual void HighlightSectionOfGrid(Tile.PositionOnGrid PositionToHighlight)
         {
-            foreach(Tile t in TileGrid)
+            foreach (Tile t in TileGrid)
             {
-                if(t.TilePositionOnGrid == PositionToHighlight)
+                t.spriteRenderer.color = Color.white;
+                if (t.TilePositionOnGrid == PositionToHighlight)
                 {
-                    t.spriteRenderer.color = Color.blue;
+                    t.spriteRenderer.color = Color.gray;
                 }
             }
         }
@@ -133,12 +131,12 @@ namespace Generation
             foreach (Tile t in TileGrid)
             {
                 t.spriteRenderer.sprite = Container.AssignedGridAssets.Themes[(int)theme].Sprites[(int)t.TilePositionOnGrid];
-                if(t.transform.childCount > 0)
-                    for(int i = 0; i < t.transform.childCount; ++i)
+                if (t.transform.childCount > 0)
+                    for (int i = 0; i < t.transform.childCount; ++i)
                     {
                         SpriteRenderer r = t.transform.GetChild(i).GetComponent<SpriteRenderer>();
                         r.sprite = Container.AssignedGridAssets.Themes[(int)theme].TileDecorations[0].Sprite;
-                    }                       
+                    }
             }
         }
 
@@ -156,9 +154,9 @@ namespace Generation
         public virtual Tile GetFirstUnoccupiedTile(Tile.PositionOnGrid position)
         {
             int tileLength = TileGrid.Length;
-            foreach(Tile t in TileGrid)
+            foreach (Tile t in TileGrid)
             {
-                if(t.TilePositionOnGrid == position)
+                if (t.TilePositionOnGrid == position)
                 {
                     if (t.transform.childCount == 0)
                         return t;

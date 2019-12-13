@@ -35,15 +35,18 @@ namespace Generation
 
         [Header("Grid Information")]
         [SerializeField]
-        private GridAssetSpawner spawner;
+        private GridAssetSpawner assetSpawner;
+        [SerializeField]
+        private GridContainer mapContainer;
+        public GridContainer MapContainer { get => mapContainer; }
+        [SerializeField]
+        private GridAssetTheme.Theme mapTheme;
+        public GridAssetTheme.Theme MapTheme { get => mapTheme; }
         [SerializeField]
         private MapType mapType;
         public MapType _MapType { get => mapType; }
         [SerializeField]
         [ConditionalField("mapType", false, MapType.Custom)]
-        private Vector2 mapSize;
-        public Vector2 MapSize { get => mapSize; }
-        [SerializeField]
         private MapCameraPivot mapCameraPivot;
         public MapCameraPivot _MapCameraPivot { get => mapCameraPivot; }
         [SerializeField]
@@ -51,11 +54,9 @@ namespace Generation
         private Vector2 customPivot;
         public Vector2 CustomPivot { get => customPivot; }
         [SerializeField]
-        private GridAssetTheme.Theme mapTheme;
-        public GridAssetTheme.Theme MapTheme { get => mapTheme; }
-        [SerializeField]
-        private GridContainer mapContainer;
-        public GridContainer MapContainer { get => mapContainer; }
+        [ConditionalField("mapType", false, MapType.Custom)]
+        private Vector2 mapSize;
+        public Vector2 MapSize { get => mapSize; }
 
         [Header("Debugging")]
         [SerializeField]
@@ -68,13 +69,13 @@ namespace Generation
 
         public void Init(GridAssetSpawner _spawner, GridContainer container)
         {
-            spawner = _spawner;
+            assetSpawner = _spawner;
             mapContainer = container;
         }
 
         public void Init(GridAssetSpawner _spawner, GridContainer container, GridAssetTheme.Theme theme)
         {
-            spawner = _spawner;
+            assetSpawner = _spawner;
             mapContainer = container;
             mapTheme = theme;
         }
@@ -83,7 +84,7 @@ namespace Generation
         {
             if (MapContainer == null)
                 throw new UnassignedReferenceException($"Grid Container is not assigned (on {this.name})");
-            if (spawner == null)
+            if (assetSpawner == null)
                 throw new UnassignedReferenceException($"Grid Asset Spawner is not assigned (on {this.name})");
 
             MapGenerating?.Invoke();
@@ -98,12 +99,10 @@ namespace Generation
             }
             mapContainer.gridSize = new Vector2(grid.Columns, grid.Rows);
             mapContainer.AssignedGrid = grid;
-            mapContainer.AssignedGridAssets = spawner.GridAssets;
-            spawner.SpawnAssets(grid, "Tile", mapContainer.transform, mapTheme);
-            spawner.SpawnTileDecorations(grid, "Tile Decoration", Tile.PositionOnGrid.Center, mapTheme);
-            //we are accessing the grids transform component
-            //which only exists AFTER the assets are spawned in which contain the transform component
-            //before the assets are spawned, the tiles have basic information like position, etc
+            mapContainer.AssignedGridAssets = assetSpawner.GridAssets;
+            assetSpawner.SpawnAssetAsTile(grid, "Tile", mapContainer.transform, mapTheme);
+            assetSpawner.SpawnTileDecorations(grid, "Tile Decoration", Tile.PositionOnGrid.Center, mapTheme);
+            //assetSpawner.SpawnAssetGeneric();
             if (mapType == MapType.Custom)
                 switch (mapCameraPivot)
                 {

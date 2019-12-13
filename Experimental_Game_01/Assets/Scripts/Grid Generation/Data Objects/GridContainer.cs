@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Generation
 {
@@ -17,6 +18,7 @@ namespace Generation
 
         #region Debugging Stuff
         private int themeCycleCounter = 0;
+        private int positionsOnGridCounter = -1;
         private void Update()
         {
             //This is temporary debugging stuff
@@ -25,6 +27,13 @@ namespace Generation
                 themeCycleCounter = themeCycleCounter < AssignedGridAssets.Themes.Length - 1 ? themeCycleCounter + 1 : 0;
                 GridAssetTheme.Theme currentTheme = (GridAssetTheme.Theme)themeCycleCounter;
                 AssignedGrid.HotSwapTileTheme(currentTheme);
+            }
+
+            if(Input.GetKeyDown(KeyCode.Q))
+            {
+                System.Array positionsOnGrid = System.Enum.GetValues(typeof(Tile.PositionOnGrid));
+                positionsOnGridCounter = positionsOnGridCounter < positionsOnGrid.Length - 1 ? positionsOnGridCounter + 1 : 0;
+                AssignedGrid.HighlightSectionOfGrid((Tile.PositionOnGrid)positionsOnGridCounter);
             }
         }
         #endregion

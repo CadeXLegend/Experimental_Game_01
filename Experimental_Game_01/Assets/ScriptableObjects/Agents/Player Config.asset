@@ -16,4 +16,8 @@ MonoBehaviour:
   Graphic: {fileID: 21301030, guid: 9afe77e76eb29394bb29beb2eb3cab36, type: 3}
   UsesRigidbody2D: 1
   AgentSize: {x: 0.8, y: 0.8}
+  useAgentStats: 1
   MovementSpeed: 4
+  Health: 0
+  Attack: 0
+  AttackRange: 0

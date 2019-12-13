@@ -623,6 +623,7 @@ PlayerSettings:
       daydreamIconForeground: {fileID: 0}
       daydreamIconBackground: {fileID: 0}
   cloudServicesEnabled:
+    Build: 1
     UNet: 1
   luminIcon:
     m_Name: 
@@ -636,10 +637,10 @@ PlayerSettings:
     m_VersionCode: 1
     m_VersionName: 
   apiCompatibilityLevel: 6
-  cloudProjectId: 
+  cloudProjectId: 2eddaa4a-7c2b-4128-ba8c-e84e324a22b8
   framebufferDepthMemorylessMode: 0
-  projectName: 
-  organizationId: 
+  projectName: Experimental_Game_01
+  organizationId: cadexlegend
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 1
   disableOldInputManagerSupport: 0

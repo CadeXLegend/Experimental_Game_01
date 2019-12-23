@@ -9,17 +9,18 @@ namespace Generation
     /// </summary>
     public class Tile : MonoBehaviour
     {
+        [Flags]
         public enum PositionOnGrid
         {
-            TopLeftCorner = 0,
-            TopEdgeColumn = 1,
-            TopRightCorner = 2,
-            LeftEdgeRow = 3,
-            Center = 4,
-            RightEdgeRow = 5,
-            BottomLeftCorner = 6,
-            BottomEdgeColumn = 7,
-            BottomRightCorner = 8,
+            TopLeftCorner =         1 << 0,              // 1
+            TopEdgeColumn =         1 << 1,              // 2
+            TopRightCorner =        1 << 2,              // 4
+            LeftEdgeRow =           1 << 3,              // 8
+            Center =                1 << 4,              // 16
+            RightEdgeRow =          1 << 5,              // 32
+            BottomLeftCorner =      1 << 6,              // 64
+            BottomEdgeColumn =      1 << 7,              // 128
+            BottomRightCorner =     1 << 8,              // 256
         }
 
         //the properties with [SerializeField] [ReadOnly] are for debugging & information purposes in the inspector
@@ -52,6 +53,8 @@ namespace Generation
         Dictionary<Tile, Color32> lastSelectedTiles = new Dictionary<Tile, Color32>();
         private void OnMouseDown()
         {
+            if (neighbours == null || neighbours.Count < 1) return;
+
             foreach (Tile n in neighbours)
             {
                 lastSelectedTiles.Add(n, n.spriteRenderer.color);
@@ -62,6 +65,8 @@ namespace Generation
         }
         private void OnMouseUp()
         {
+            if (lastSelectedTiles == null || lastSelectedTiles.Count < 1) return;
+
             foreach (KeyValuePair<Tile, Color32> pair in lastSelectedTiles)
                 pair.Key.spriteRenderer.color = pair.Value;
             lastSelectedTiles.Clear();

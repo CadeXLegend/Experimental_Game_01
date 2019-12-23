@@ -20,15 +20,15 @@ namespace Generation
             Custom,
         }
 
-        public delegate void MapGenerationHandler();
+        public delegate void MapGenerationEvents();
         /// <summary>
         /// This activates before the Grid has been Generated.
         /// </summary>
-        public event MapGenerationHandler MapGenerating;
+        public event MapGenerationEvents OnMapGenerating;
         /// <summary>
         /// This activates after the Grid has been Generated.
         /// </summary>
-        public event MapGenerationHandler MapGenerated;
+        public event MapGenerationEvents OnMapGenerated;
 
         private Grid grid;
         public Grid Grid { get => grid; }
@@ -87,7 +87,7 @@ namespace Generation
             if (assetSpawner == null)
                 throw new UnassignedReferenceException($"Grid Asset Spawner is not assigned (on {this.name})");
 
-            MapGenerating?.Invoke();
+            OnMapGenerating?.Invoke();
             switch (mapType)
             {
                 case MapType.FittedToScreen:
@@ -100,7 +100,7 @@ namespace Generation
             mapContainer.gridSize = new Vector2(grid.Columns, grid.Rows);
             mapContainer.AssignedGrid = grid;
             mapContainer.AssignedGridAssets = assetSpawner.GridAssets;
-            assetSpawner.SpawnAssetAsTile(grid, "Tile", mapContainer.transform, mapTheme);
+            assetSpawner.SpawnAssetsAsTileToFillGrid(grid, "Tile", mapContainer.transform, mapTheme);
             assetSpawner.SpawnTileDecorations(grid, "Tile Decoration", Tile.PositionOnGrid.Center, mapTheme);
             //assetSpawner.SpawnAssetGeneric();
             if (mapType == MapType.Custom)
@@ -113,7 +113,7 @@ namespace Generation
                         Camera.main.transform.position = customPivot;
                         break;
                 }
-            MapGenerated?.Invoke();
+            OnMapGenerated?.Invoke();
         }
     }
 }

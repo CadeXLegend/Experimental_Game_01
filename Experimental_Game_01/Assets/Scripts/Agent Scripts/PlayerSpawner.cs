@@ -24,7 +24,7 @@ namespace Agent
         // Start is called before the first frame update
         void Start()
         {
-            generator.MapGenerated += SpawnPlayers;
+            generator.OnMapGenerated += SpawnPlayers;
         }
 
         [ButtonMethod]

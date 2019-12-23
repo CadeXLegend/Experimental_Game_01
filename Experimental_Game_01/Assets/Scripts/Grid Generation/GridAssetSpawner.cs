@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Generation
@@ -29,21 +30,66 @@ namespace Generation
         }
 
         /// <summary>
+        /// Spawn your own asset directly onto a Tile.
+        /// </summary>
+        /// <param name="asset">The asset to spawn</param>
+        /// <param name="assetName">The name the asset will have post-spawn</param>
+        /// <param name="t">The Tile to spawn the asset onto</param>
+        public virtual GameObject SpawnAssetGeneric(GameObject asset, string assetName, Tile t)
+        {
+            if (t.transform.childCount > 0)
+            {
+                throw new UnityException("You cannot spawn an asset on an already occupied tile!");
+            }
+
+            GameObject go = Instantiate(asset, t.transform.position, Quaternion.identity, t.transform);
+            go.name = $"{assetName}";
+            SpawningAssets?.Invoke();
+            AssetsSpawned?.Invoke();
+            return go;
+        }
+
+        /// <summary>
+        /// Spawn your own asset directly onto a Tile.
+        /// </summary>
+        /// <param name="asset">The asset to spawn</param>
+        /// <param name="assetName">The name the asset will have post-spawn</param>
+        /// <param name="t">The Tile to spawn the asset onto</param>
+        public virtual GameObject SpawnAssetGeneric(GameObject asset, string assetName, Tile t, bool spawnOntoRandomTileNeighbour)
+        {
+            Transform chosenTransform = t.transform;
+            if (spawnOntoRandomTileNeighbour)
+                chosenTransform = t.Neighbours[new System.Random().Next(0, t.Neighbours.Count)].transform;
+
+            if (chosenTransform.childCount > 0)
+            {
+                throw new UnityException("You cannot spawn an asset on an already occupied tile!");
+            }
+
+            GameObject go = Instantiate(asset, chosenTransform.position, Quaternion.identity, chosenTransform);
+            go.name = $"{assetName}";
+            SpawningAssets?.Invoke();
+            AssetsSpawned?.Invoke();
+            return go;
+        }
+
+        /// <summary>
         /// Spawn your own asset directly onto a Tile on the Grid.
         /// </summary>
         /// <param name="grid">Grid to Spawn asset onto.</param>
         /// <param name="assetName">Name of your asset to be displayed in the heirarchy.</param>
         /// <param name="positionOnGrid">What position on the Grid you would like your asset to be spawned onto (Tile specific).</param>
         /// <param name="parent">The spawned asset's parent object.</param>
-        public virtual void SpawnAssetGeneric(Grid grid, GameObject asset, string assetName, Tile.PositionOnGrid positionOnGrid)
+        public virtual GameObject SpawnAssetGeneric(Grid grid, GameObject asset, string assetName, Tile.PositionOnGrid positionOnGrid)
         {
             Tile t = grid.GetRandomUnoccupiedTile(positionOnGrid);
             if (!(t.TilePositionOnGrid == positionOnGrid))
-                return;
+                return null;
             GameObject go = Instantiate(asset, t.transform.position, Quaternion.identity, t.transform);
             go.name = $"{assetName}";
             SpawningAssets?.Invoke();
             AssetsSpawned?.Invoke();
+            return go;
         }
 
         /// <summary>
@@ -52,9 +98,10 @@ namespace Generation
         /// <param name="grid">Data Object containing Grid information and functionality.</param>
         /// <param name="assetName">Name for each generated asset</param>
         /// <param name="gridContainer">Parent for the instantiated assets</param>
-        public virtual void SpawnAssetAsTile(Grid grid, string assetName, Transform gridContainer, GridAssetTheme.Theme theme)
+        public virtual List<GameObject> SpawnAssetsAsTileToFillGrid(Grid grid, string assetName, Transform gridContainer, GridAssetTheme.Theme theme)
         {
-            Array.ForEach(grid.TileGrid, (column, row) => 
+            List<GameObject> goArray = new List<GameObject>();
+            Array.ForEach(grid.TileGrid, (column, row) =>
             {
                 Tile t = grid.TileGrid[column, row];
                 Vector3 position = grid.CoordinatesToWorldPosition(column, row);
@@ -72,6 +119,7 @@ namespace Generation
                 goT.CoordinatesOnGrid = t.CoordinatesOnGrid;
                 goT.spriteRenderer = goT.GetComponent<SpriteRenderer>();
                 //transpose ends here ^
+                int tilePosOnGrid = t.TilePositionOnGrid.GetUnshiftedNumber();
                 #region Error Handling
                 GridAssetTheme[] themes = gridAssets.Themes;
                 if (themes[(int)theme] == null)
@@ -79,14 +127,14 @@ namespace Generation
                 Sprite[] sprites = themes[(int)theme].Sprites;
                 if (sprites == null || sprites.Length < 1)
                     throw new System.Exception($"There must be Sprites assigned to the GridAssets Themes (called from: {this.name})");
-                if ((int)t.TilePositionOnGrid > sprites.Length - 1)
+                if (tilePosOnGrid > sprites.Length - 1)
                     throw new System.Exception($"You need at least 9 Sprites for a Theme to fill out every Tile's Position! (called from: {this.name})");
-                if (sprites[(int)t.TilePositionOnGrid] == null)
+                if (sprites[tilePosOnGrid] == null)
                     throw new System.Exception($"The Sprite meant for tile at position: {t.TilePositionOnGrid.ToString()} (attached to: {this.name}) is null!");
                 #endregion
-                sr.sprite = sprites[(int)t.TilePositionOnGrid];
+                sr.sprite = sprites[tilePosOnGrid];
                 grid.TileGrid[column, row] = goT;
-
+                goArray.Add(go);
                 SpawningAssets?.Invoke();
             });
 
@@ -110,6 +158,8 @@ namespace Generation
                 #endregion
             });
             AssetsSpawned?.Invoke();
+
+            return goArray;
         }
 
         /// <summary>
@@ -118,8 +168,10 @@ namespace Generation
         /// <param name="grid">Data Object containing Grid information and functionality.</param>
         /// <param name="assetName">Name for each generated asset</param>
         /// <param name="gridContainer">Parent for the instantiated assets</param>
-        public virtual void SpawnTileDecorations(Grid grid, string assetName, Tile.PositionOnGrid positionOnGrid, GridAssetTheme.Theme theme, float spawnRate = 0.1f)
+        public virtual List<GameObject> SpawnTileDecorations(Grid grid, string assetName, Tile.PositionOnGrid positionOnGrid, GridAssetTheme.Theme theme, float spawnRate = 0.1f)
         {
+            List<GameObject> goArray = new List<GameObject>();
+
             Array.ForEach(grid.TileGrid, (column, row) =>
             {
                 Tile t = grid.TileGrid[column, row];
@@ -141,8 +193,10 @@ namespace Generation
                 go.transform.localScale *= gridAssets.Themes[(int)theme].TileDecorations[0].SpriteScale;
                 sr.sortingOrder = 1;
                 SpawningAssets?.Invoke();
+                goArray.Add(go);
             });
             AssetsSpawned?.Invoke();
+            return goArray;
         }
     }
 }

@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8e265310b0c2a0348b1f2723b442f75d, type: 3}
-  m_Name: Player Config
+  m_Name: Default Enemy
   m_EditorClassIdentifier: 
-  AgentName: Player
-  Graphic: {fileID: 21301030, guid: 9afe77e76eb29394bb29beb2eb3cab36, type: 3}
+  AgentName: Skeleton
+  Graphic: {fileID: 21301090, guid: 9afe77e76eb29394bb29beb2eb3cab36, type: 3}
   UsesRigidbody2D: 1
-  AgentSize: {x: 0.8, y: 0.8}
+  AgentSize: {x: 1, y: 1}
   useAgentStats: 1
-  MovementSpeed: 4
-  Health: 10
+  MovementSpeed: 2.5
+  Health: 2
   Attack: 1
-  AttackRange: 4
+  AttackRange: 1

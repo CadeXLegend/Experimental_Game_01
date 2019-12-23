@@ -31,9 +31,9 @@ namespace Generation
 
             if(Input.GetKeyDown(KeyCode.Q))
             {
-                System.Array positionsOnGrid = System.Enum.GetValues(typeof(Tile.PositionOnGrid));
+                Tile.PositionOnGrid[] positionsOnGrid = (Tile.PositionOnGrid[])System.Enum.GetValues(typeof(Tile.PositionOnGrid));
                 positionsOnGridCounter = positionsOnGridCounter < positionsOnGrid.Length - 1 ? positionsOnGridCounter + 1 : 0;
-                AssignedGrid.HighlightSectionOfGrid((Tile.PositionOnGrid)positionsOnGridCounter);
+                AssignedGrid.HighlightSectionOfGrid(positionsOnGrid[positionsOnGridCounter]);
             }
         }
         #endregion

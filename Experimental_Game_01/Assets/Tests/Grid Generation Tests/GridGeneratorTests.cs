@@ -86,8 +86,8 @@ namespace Tests
             generator.Init(spawner, container, 0);
             bool gridGenerating = false;
             bool gridGenerated = false;
-            generator.MapGenerating += () => { gridGenerating = true; };
-            generator.MapGenerated += () => { gridGenerated = true; };
+            generator.OnMapGenerating += () => { gridGenerating = true; };
+            generator.OnMapGenerated += () => { gridGenerated = true; };
             #endregion
 
             Assert.DoesNotThrow(() => generator.Generate());

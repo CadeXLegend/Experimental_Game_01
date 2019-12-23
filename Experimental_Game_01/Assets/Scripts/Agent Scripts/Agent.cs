@@ -14,7 +14,7 @@ namespace Agent
         private Rigidbody2D rb;
         [SerializeField, GetComponent]
         private SpriteRenderer r;
-        private MoverFromInput mover;
+        private IMover mover;
 
         private int health;
         private int Health
@@ -23,20 +23,19 @@ namespace Agent
             {
                 //restrict the possible values for health to be
                 //within the min and max health range
-                return Mathf.Clamp(0, maxHealth, health);
+                return Mathf.Clamp(health, 0, maxHealth);
             }
             set
             {
                 //restrict the possible values for health to be
                 //within the min and max health range
-                health = Mathf.Clamp(0, maxHealth, value);
+                health = Mathf.Clamp(value, 0, maxHealth);
             }
         }
         private int maxHealth;
         private int attack;
         private int attackRange;
 
-        //NPC INIT -> use this to initialize a non-playing Agent.
         /// <summary>
         /// Initializes an Agent with the given Parameters.
         /// </summary>
@@ -57,19 +56,18 @@ namespace Agent
             attackRange = agentData.AttackRange;
         }
 
-        //PLAYER INIT -> use this to initialize a player Agent.
         /// <summary>
         /// Initializes an Agent with the given Parameters.
         /// </summary>
         /// <param name="_agentData">The template data container for the Agent class.</param>
         /// <param name="_mover">The input receiver for the Agent.</param>
-        public virtual void Init(AgentConfig _agentData, MoverFromInput _mover)
+        public virtual void Init(AgentConfig _agentData, IMover _mover)
         {
             agentData = _agentData;
             mover = _mover;
             //rb = GetComponent<Rigidbody2D>();
             //r = GetComponent<SpriteRenderer>();
-            mover = GetComponent<MoverFromInput>();
+            //mover = GetComponent<MoverFromInput>();
 
             //binding agent data
             name = agentData.AgentName;

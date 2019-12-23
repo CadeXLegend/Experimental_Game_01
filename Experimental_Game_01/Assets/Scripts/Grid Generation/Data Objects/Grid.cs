@@ -61,6 +61,13 @@ namespace Generation
 
         private void AssignCoordinatesAndPositionsToTiles()
         {
+            Tile.PositionOnGrid gridCornersFlags =
+                (
+                    Tile.PositionOnGrid.TopLeftCorner    |
+                    Tile.PositionOnGrid.TopRightCorner   |
+                    Tile.PositionOnGrid.BottomLeftCorner |
+                    Tile.PositionOnGrid.BottomRightCorner
+                );
             Array.ForEach(TileGrid, (column, row) =>
             {
                 Vector2 coordinatesOnGrid = new Vector2(column, row);
@@ -69,10 +76,7 @@ namespace Generation
                 TileGrid[column, row].Init(tpOnG, coordinatesOnGrid);
                 Tile t = TileGrid[column, row];
 
-                if (t.TilePositionOnGrid == Tile.PositionOnGrid.TopLeftCorner) GridCorners.Add(t);
-                if (t.TilePositionOnGrid == Tile.PositionOnGrid.BottomLeftCorner) GridCorners.Add(t);
-                if (t.TilePositionOnGrid == Tile.PositionOnGrid.TopRightCorner) GridCorners.Add(t);
-                if (t.TilePositionOnGrid == Tile.PositionOnGrid.BottomRightCorner) GridCorners.Add(t);                             
+                if (gridCornersFlags.HasFlag(t.TilePositionOnGrid)) GridCorners.Add(t);
             });
         }
 
@@ -130,12 +134,15 @@ namespace Generation
         {
             foreach (Tile t in TileGrid)
             {
-                t.spriteRenderer.sprite = Container.AssignedGridAssets.Themes[(int)theme].Sprites[(int)t.TilePositionOnGrid];
+                t.spriteRenderer.sprite = Container.AssignedGridAssets.Themes[(int)theme].Sprites[t.TilePositionOnGrid.GetUnshiftedNumber()];
                 if (t.transform.childCount > 0)
                     for (int i = 0; i < t.transform.childCount; ++i)
                     {
-                        SpriteRenderer r = t.transform.GetChild(i).GetComponent<SpriteRenderer>();
-                        r.sprite = Container.AssignedGridAssets.Themes[(int)theme].TileDecorations[0].Sprite;
+                        if (t.transform.GetChild(i).name.Contains("Decoration"))
+                        {
+                            SpriteRenderer r = t.transform.GetChild(i).GetComponent<SpriteRenderer>();
+                            r.sprite = Container.AssignedGridAssets.Themes[(int)theme].TileDecorations[0].Sprite;
+                        }
                     }
             }
         }

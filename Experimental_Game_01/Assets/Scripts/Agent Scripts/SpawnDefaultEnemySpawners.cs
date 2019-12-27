@@ -41,6 +41,6 @@ public class SpawnDefaultEnemySpawners : MonoBehaviour
                 ));
 
         foreach (GameObject go in spawners)
-            go.GetComponent<SpawnAgentOverTime>().Init(assetSpawner, go.transform.parent.GetComponent<Tile>());       
+            go.GetComponent<SpawnAgentOverTime>().Init(assetSpawner, go.transform.parent.GetComponent<Tile>());
     }
 }

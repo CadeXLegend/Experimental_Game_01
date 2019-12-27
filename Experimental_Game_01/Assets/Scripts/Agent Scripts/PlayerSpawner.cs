@@ -1,4 +1,5 @@
-﻿using MyBox;
+﻿using Generation;
+using MyBox;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -37,14 +38,18 @@ namespace Agent
             }
 
             for (int i = 0; i < AmountOfPlayers; ++i)
+            {
+                Tile chosenTile = generator.Grid.GetRandomUnoccupiedTile(Tile.PositionOnGrid.Center);
                 SpawnedPlayers.Add(Spawn(
-                    playerPrefabs[i],      //the player's prefab/gameobject to spawn
-                    playerDatas[i],        //the player's data to bind to the player's components
-                    generator.Grid.GetRandomUnoccupiedTile(Generation.Tile.PositionOnGrid.Center).transform.position, //the player's tile to spawn on
-                    SpawnedAgentsParent));  //the parent the player will be a child of
+                    prefab: playerPrefabs[i],                   //the player's prefab/gameobject to spawn
+                    agentData: playerDatas[i],                  //the player's data to bind to the player's components
+                    position: chosenTile.transform.position,    //the player's tile to spawn on
+                    parent: SpawnedAgentsParent,                //the parent the player will be a child of
+                    tileSpawnedOn: chosenTile));                //the tile the player was spawned onto 
+            }
         }
 
-        public virtual GameObject Spawn(GameObject prefab, AgentConfig agentData, Vector3 position, Transform parent)
+        public virtual GameObject Spawn(GameObject prefab, AgentConfig agentData, Vector3 position, Transform parent, Tile tileSpawnedOn)
         {
             #region Instantiation & Component Initialization
             prefab = GameObject.Instantiate(prefab, position, Quaternion.identity, parent);
@@ -54,7 +59,7 @@ namespace Agent
             #endregion
 
             #region Data Binding
-            mover.Init(agentData);
+            mover.Init(agentData, MoverFromInput.TypeOfInput.ClickOnGrid, tileSpawnedOn);
             agent.Init(agentData, mover);
             #endregion
 

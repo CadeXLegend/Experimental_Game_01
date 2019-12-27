@@ -10,13 +10,18 @@ public class AISuperSimpleMove : MonoBehaviour, IMover
     private Tile lastTileWasOn;
     private Tile currentTile;
     private Tile tileToMoveTo;
-    //temp variable vvv
-    private float moveStep = 1f;
 
     public void Init(AgentConfig _config, Tile _currentTile)
     {
         config = _config;
         currentTile = _currentTile;
+
+        TurnTicker.OnTick += MoveSuperSimpleApproach;
+    }
+
+    private void MoveSuperSimpleApproach()
+    {
+        Move(FindPosToMoveToUsingCurrentTile());
     }
 
     public virtual void Move(Vector2 direction)
@@ -27,16 +32,6 @@ public class AISuperSimpleMove : MonoBehaviour, IMover
         transform.position = Vector3.Lerp(transform.position, direction, 1f);
         currentTile = tileToMoveTo;
         transform.parent = tileToMoveTo.transform;
-    }
-
-    private void FixedUpdate()
-    {
-        moveStep -= Time.fixedDeltaTime;
-        if (moveStep > 0f)
-            return;
-
-        moveStep = 1f;
-        Move(FindPosToMoveToUsingCurrentTile());
     }
 
     private Vector2 FindPosToMoveToUsingCurrentTile()

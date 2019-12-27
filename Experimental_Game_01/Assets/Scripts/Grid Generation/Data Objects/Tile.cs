@@ -35,6 +35,11 @@ namespace Generation
 
         public SpriteRenderer spriteRenderer { get; set; }
 
+        private bool highlighted;
+        public bool Highlighted { get => highlighted; }
+        private bool selected;
+        public bool Selected { get => selected; }
+
         public void Init(PositionOnGrid _TilePositionOnGrid)
         {
             TilePositionOnGrid = _TilePositionOnGrid;
@@ -51,25 +56,50 @@ namespace Generation
         }
 
         Dictionary<Tile, Color32> lastSelectedTiles = new Dictionary<Tile, Color32>();
-        private void OnMouseDown()
+        public virtual void VisualizeNeighbours()
         {
             if (neighbours == null || neighbours.Count < 1) return;
+            if (lastSelectedTiles.ContainsKey(this))
+                return;
 
             foreach (Tile n in neighbours)
             {
-                lastSelectedTiles.Add(n, n.spriteRenderer.color);
-                n.spriteRenderer.color = new Color32(255, 0, 255, 100);
+                if (n.transform.childCount == 0)
+                {
+                    lastSelectedTiles.Add(n, n.spriteRenderer.color);
+                    n.highlighted = true;
+                    n.spriteRenderer.color = new Color32(255, 0, 255, 100);
+                }
+                else
+                {
+                    if (n.transform.GetChild(0).tag == "Enemy")
+                    {
+                        lastSelectedTiles.Add(n, n.spriteRenderer.color);
+                        n.highlighted = true;
+                        n.spriteRenderer.color = new Color32(255, 0, 0, 200);
+                    }
+                }
             }
             lastSelectedTiles.Add(this, spriteRenderer.color);
-            spriteRenderer.color = new Color32(255, 0, 0, 100);
         }
-        private void OnMouseUp()
+
+        public virtual void StopVisualizingNeighbours()
         {
             if (lastSelectedTiles == null || lastSelectedTiles.Count < 1) return;
 
             foreach (KeyValuePair<Tile, Color32> pair in lastSelectedTiles)
+            {
+                pair.Key.highlighted = false;
+                pair.Key.selected = false;
                 pair.Key.spriteRenderer.color = pair.Value;
+            }
             lastSelectedTiles.Clear();
+        }
+
+        private void OnMouseDown()
+        {
+            if (highlighted)
+                selected = true;
         }
     }
 }

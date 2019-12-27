@@ -1,0 +1,8 @@
+Immediate next steps:
+
+- Action economy
+	- How many actions an agent can make until its turn is over
+
+- State Machine which will handle agent turns
+	- This will fix a few issues, including agents moving at the same time so they can enter the same tile
+

@@ -33,7 +33,8 @@ This project isn't licensed.  Woo.
 
 ## Some Noteworthy Things To Remember
 
-### KISS: Keep It Stupidly Simple!
+### KISS: 
+    Keep It Stupidly Simple!
 
 ### [SOLID](https://en.wikipedia.org/wiki/SOLID):
 * [Single Responsibility Principle](https://en.wikipedia.org/wiki/Single_responsibility_principle)

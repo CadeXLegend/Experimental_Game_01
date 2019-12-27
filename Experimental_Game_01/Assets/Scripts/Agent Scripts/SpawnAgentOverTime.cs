@@ -9,19 +9,6 @@ public class SpawnAgentOverTime : MonoBehaviour
 
     [Header("Spawn Information")]
     [SerializeField]
-    private float initialSpawnTime;
-    [SerializeField]
-    private float spawnTimeIncrement;
-    private float actualSpawnTime;
-    private float ActualSpawnTime
-    {
-        get
-        {
-            return actualSpawnTime /= spawnTimeIncrement;
-        }
-    }
-
-    [SerializeField]
     private GameObject agentToSpawn;
     [SerializeField]
     private Agent.AgentConfig agentConfig;
@@ -38,15 +25,10 @@ public class SpawnAgentOverTime : MonoBehaviour
         assetSpawner = _assetSpawner;
     }
 
-    private void Awake()
+    private void FixedUpdate()
     {
-        actualSpawnTime = initialSpawnTime;
-        SpawnEnemyOnTick();
-    }
-
-    internal virtual void SpawnEnemyOnTick()
-    {
-        InvokeRepeating("SpawnEnemy", initialSpawnTime, ActualSpawnTime);
+        if (TurnTicker.Ticks % 10 == 0)
+            SpawnEnemy();
     }
 
     internal virtual void SpawnEnemy()
@@ -57,12 +39,13 @@ public class SpawnAgentOverTime : MonoBehaviour
         try
         {
             GameObject go = assetSpawner.SpawnAssetGeneric(
-                agentToSpawn,  //the agent we want to spawn into the world
-                agentToSpawn.name, //the name of the agent, e.g: skeleton
-                currentTile, //the current tile the thing this is attached to is on
-                spawnOntoRandomTileNeighbour: true //whether we want this object to spawn automagically onto a randomly selected neighbour tile
+                asset: agentToSpawn,                    //the agent we want to spawn into the world
+                assetName: agentToSpawn.name,           //the name of the agent, e.g: skeleton
+                t: currentTile,                         //the current tile the thing this is attached to is on
+                spawnOntoRandomTileNeighbour: true      //whether we want this object to spawn automagically onto a randomly selected neighbour tile
                 );
 
+            go.tag = "Enemy";
             AISuperSimpleMove aiMover = go.AddComponent<AISuperSimpleMove>();
             aiMover.Init(agentConfig, go.transform.parent.GetComponent<Tile>());
             go.GetComponent<Agent.Agent>().Init(agentConfig, aiMover);

@@ -71,7 +71,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300972, guid: 9afe77e76eb29394bb29beb2eb3cab36, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -121,8 +121,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cc965e6017282b4cb26b286661da114, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialSpawnTime: 5
-  spawnTimeIncrement: 0.9
   agentToSpawn: {fileID: 7657845014104408728, guid: 4bd2f506062c6c3498a96ffb72708215,
     type: 3}
   agentConfig: {fileID: 11400000, guid: d3f704fd6e6f1784f913b975fd223dad, type: 2}

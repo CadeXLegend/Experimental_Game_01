@@ -44,7 +44,7 @@ namespace Agent
                     prefab: playerPrefabs[i],                   //the player's prefab/gameobject to spawn
                     agentData: playerDatas[i],                  //the player's data to bind to the player's components
                     position: chosenTile.transform.position,    //the player's tile to spawn on
-                    parent: SpawnedAgentsParent,                //the parent the player will be a child of
+                    parent: chosenTile.transform,               //the parent the player will be a child of
                     tileSpawnedOn: chosenTile));                //the tile the player was spawned onto 
             }
         }
@@ -52,7 +52,7 @@ namespace Agent
         public virtual GameObject Spawn(GameObject prefab, AgentConfig agentData, Vector3 position, Transform parent, Tile tileSpawnedOn)
         {
             #region Instantiation & Component Initialization
-            prefab = GameObject.Instantiate(prefab, position, Quaternion.identity, parent);
+            prefab = Instantiate(prefab, position, Quaternion.identity, parent);
             Agent agent = prefab.GetComponent<Agent>();
             MoverFromInput mover = prefab.AddComponent<MoverFromInput>();
             UnityEditor.CAutoInjectionEditor.InjectFor_CurrentScene();

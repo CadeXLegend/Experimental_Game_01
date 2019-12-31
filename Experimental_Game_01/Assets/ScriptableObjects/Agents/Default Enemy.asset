@@ -17,7 +17,8 @@ MonoBehaviour:
   UsesRigidbody2D: 1
   AgentSize: {x: 1, y: 1}
   useAgentStats: 1
-  MovementSpeed: 2.5
+  MovementSpeed: 8
   Health: 2
   Attack: 1
   AttackRange: 1
+  ActionsPerTurn: 5

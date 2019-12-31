@@ -21,3 +21,4 @@ MonoBehaviour:
   Health: 10
   Attack: 1
   AttackRange: 4
+  ActionsPerTurn: 3

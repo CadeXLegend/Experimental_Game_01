@@ -13,12 +13,14 @@ public class AISuperSimpleMove : MonoBehaviour, IMover
     private Tile tileToMoveTo;
     private int attemptsToMove = 0;
     private bool hasFoundTileToMoveTo = false;
+    private float movementSpeed;
 
     public void Init(Agent.Agent _parent, AgentConfig _config, Tile _currentTile)
     {
         config = _config;
         currentTile = _currentTile;
         parent = _parent;
+        movementSpeed = config.MovementSpeed;
     }
 
     private void LateUpdate()
@@ -33,7 +35,7 @@ public class AISuperSimpleMove : MonoBehaviour, IMover
             parent.ProcessAction();
         }
 
-        if(tileToMoveTo != null)
+        if (tileToMoveTo != null)
             Move(tileToMoveTo.transform.position);
 
         if (hasFoundTileToMoveTo)
@@ -56,7 +58,7 @@ public class AISuperSimpleMove : MonoBehaviour, IMover
             return;
         }
 
-        transform.position = Vector2.LerpUnclamped(transform.position, direction, 1f);
+        transform.position = Vector2.LerpUnclamped(transform.position, direction, movementSpeed * Time.deltaTime);
     }
 
     private void FindTileToMoveToUsingCurrentTile()
@@ -66,17 +68,21 @@ public class AISuperSimpleMove : MonoBehaviour, IMover
 
         List<Tile> neighbours = currentTile.Neighbours;
 
+        Tile chosenOne = null;
         Vector2 lowestDistanceScore = new Vector2(999, 999);
         GameObject player = GameObject.Find("Player");
-       // foreach(Tile t in neighbours)
-       // {
-        //    if(Vector2.Distance(t.transform.position, player.transform.position) < Vector2.Distance(lowestDistanceScore, player.transform.position))
-        //        lowestDistanceScore = t.transform.position;
-        //}
+        foreach (Tile t in neighbours)
+        {
+            if (Vector2.Distance(t.transform.position, player.transform.position) < Vector2.Distance(lowestDistanceScore, player.transform.position))
+            {
+                lowestDistanceScore = t.transform.position;
+                chosenOne = t;
+            }
+        }
 
-        //return lowestDistanceScore;
+        if (chosenOne.transform.childCount > 0)
+            chosenOne = neighbours[Random.Range(0, neighbours.Count)];
 
-        Tile chosenOne = neighbours[new System.Random().Next(0, neighbours.Count)];
         if (chosenOne.transform.childCount > 0)
         {
             attemptsToMove++;

@@ -66,6 +66,7 @@ namespace Agent
             health = maxHealth;
             attack = agentData.Attack;
             attackRange = agentData.AttackRange;
+            actionsPerTurn = agentData.ActionsPerTurn;
         }
 
         /// <summary>
@@ -89,6 +90,7 @@ namespace Agent
             health = maxHealth;
             attack = agentData.Attack;
             attackRange = agentData.AttackRange;
+            actionsPerTurn = agentData.ActionsPerTurn;
         }
 
         public virtual void ProcessAction()

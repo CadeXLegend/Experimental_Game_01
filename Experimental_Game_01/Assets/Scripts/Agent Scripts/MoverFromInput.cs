@@ -28,8 +28,13 @@ namespace Agent
         private Agent parent;
 
         private Rigidbody2D rb;
-        [SerializeField, ReadOnly]
+        //[SerializeField, ReadOnly]
+        private Tile previousTile;
+        //[SerializeField, ReadOnly]
         private Tile currentTile;
+        //[SerializeField, ReadOnly]
+        private Tile tileToMoveTo;
+        private bool hasGotTileToMoveTo = false;
 
         /// <summary>
         /// The configuration file containing Agent information to be applied to this class's parameters.
@@ -39,13 +44,13 @@ namespace Agent
         [SerializeField]
         private float movementSpeed;
 
-        private Vector2 previousTilePosition = Vector2.zero;
-
         public void Init(Agent _parent, AgentConfig config)
         {
             parent = _parent;
             agentConfiguration = config;
             rb = GetComponent<Rigidbody2D>();
+
+            movementSpeed = agentConfiguration.MovementSpeed;
         }
 
         public void Init(Agent _parent, AgentConfig config, TypeOfInput _inputType)
@@ -54,6 +59,8 @@ namespace Agent
             agentConfiguration = config;
             rb = GetComponent<Rigidbody2D>();
             inputType = _inputType;
+
+            movementSpeed = agentConfiguration.MovementSpeed;
         }
 
         public void Init(Agent _parent, AgentConfig config, TypeOfInput _inputType, Tile _currentTile)
@@ -63,13 +70,13 @@ namespace Agent
             rb = GetComponent<Rigidbody2D>();
             inputType = _inputType;
             currentTile = _currentTile;
-            previousTilePosition = _currentTile.transform.position;
+
+            movementSpeed = agentConfiguration.MovementSpeed;
         }
 
         private void Start()
         {
             rb = GetComponent<Rigidbody2D>();
-            movementSpeed = agentConfiguration.MovementSpeed;
         }
 
         // Update is called once per frame
@@ -86,15 +93,18 @@ namespace Agent
 
         public virtual void Move(Vector2 direction)
         {
-            if (!agentConfiguration.UsesRigidbody2D)
+            if (!hasGotTileToMoveTo)
+            {
+                currentTile.VisualizeNeighbours();
                 return;
-
-            if (direction == previousTilePosition)
-                return;
+            }
 
             if (Vector2.Distance(transform.position, direction) < 0.01f)
             {
-                previousTilePosition = direction;
+                previousTile = currentTile;
+                currentTile = tileToMoveTo;
+                transform.parent = tileToMoveTo.transform;
+                hasGotTileToMoveTo = false;
                 parent.ProcessAction();
                 return;
             }
@@ -120,14 +130,17 @@ namespace Agent
 
         private Vector2 ClickOnGridInputToVector2()
         {
-            currentTile.VisualizeNeighbours();
+            if (hasGotTileToMoveTo)
+                return tileToMoveTo.transform.position;
+
             foreach(Tile t in currentTile.Neighbours)
             {
                 if (t.Selected)
                 {
                     currentTile.StopVisualizingNeighbours();
-                    currentTile = t;
-                    return currentTile.transform.position;
+                    tileToMoveTo = t;
+                    hasGotTileToMoveTo = true;
+                    return tileToMoveTo.transform.position;
                 }
             }
             return currentTile.transform.position;

@@ -59,5 +59,10 @@ namespace Agent
         /// </summary>
         [Tooltip("The base Attack Range an Agent will start with.")]
         public int AttackRange;
+        /// <summary>
+        /// How many Actions this Agent can make in 1 Turn
+        /// </summary>
+        [Tooltip("How many Actions this Agent can make in 1 Turn")]
+        public int ActionsPerTurn;
     }
 }

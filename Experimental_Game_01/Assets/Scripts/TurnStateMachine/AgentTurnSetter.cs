@@ -49,7 +49,7 @@ namespace TurnManagement
             agents[currentAgent].CanDoActions = currentAgentCanDoActions;
             if (!currentAgentCanDoActions)
             {
-                Debug.Log($"<b>Agent: {agents[currentAgent].name}</b> just finished their turn.");
+                //Debug.Log($"<b>Agent: {agents[currentAgent].name}</b> just finished their turn.");
                 currentAgent++;
                 TurnTicker.Tick();
             }

@@ -8,6 +8,16 @@ Creating a game to experiment with new code techniques, and all that.
 
 This is a C# Project.
 
+## Inspiration
+
+### Cardinal Quest 1: 
+http://cardinalquest.com/
+
+### Cardinal Quest 2: 
+http://cardinalquest2.com/, 
+https://store.steampowered.com/app/378030/Cardinal_Quest_2/, 
+https://play.google.com/store/apps/details?id=com.kongregate.mobile.cardinalquest.google&hl=en
+
 ## Prerequisites
 
 To use this project on your local machine, make sure you have Unity 2019.3.0b12 installed.
@@ -29,7 +39,11 @@ This project isn't licensed.  Woo.
 
 ## Acknowledgments
 
+* StackOverflow
+* Unity Scripting API
 * Just do it attitude
+* My friends
+* My mum
 
 ## Some Noteworthy Things To Remember
 

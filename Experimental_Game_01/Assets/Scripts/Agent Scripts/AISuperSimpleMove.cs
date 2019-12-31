@@ -6,22 +6,40 @@ using Generation;
 
 public class AISuperSimpleMove : MonoBehaviour, IMover
 {
+    private Agent.Agent parent;
     private AgentConfig config;
     private Tile lastTileWasOn;
     private Tile currentTile;
     private Tile tileToMoveTo;
+    private int attemptsToMove = 0;
+    private bool hasFoundTileToMoveTo = false;
 
-    public void Init(AgentConfig _config, Tile _currentTile)
+    public void Init(Agent.Agent _parent, AgentConfig _config, Tile _currentTile)
     {
         config = _config;
         currentTile = _currentTile;
-
-        TurnTicker.OnTick += MoveSuperSimpleApproach;
+        parent = _parent;
     }
 
-    private void MoveSuperSimpleApproach()
+    private void LateUpdate()
     {
-        Move(FindPosToMoveToUsingCurrentTile());
+        if (!parent.CanDoActions)
+            return;
+
+        if (attemptsToMove > 9)
+        {
+            hasFoundTileToMoveTo = false;
+            attemptsToMove = 0;
+            parent.ProcessAction();
+        }
+
+        if(tileToMoveTo != null)
+            Move(tileToMoveTo.transform.position);
+
+        if (hasFoundTileToMoveTo)
+            return;
+
+        FindTileToMoveToUsingCurrentTile();
     }
 
     public virtual void Move(Vector2 direction)
@@ -29,15 +47,22 @@ public class AISuperSimpleMove : MonoBehaviour, IMover
         if (tileToMoveTo == null)
             return;
 
-        transform.position = Vector3.Lerp(transform.position, direction, 1f);
-        currentTile = tileToMoveTo;
-        transform.parent = tileToMoveTo.transform;
+        if (Vector2.Distance(transform.position, direction) < 0.01f)
+        {
+            currentTile = tileToMoveTo;
+            transform.parent = tileToMoveTo.transform;
+            hasFoundTileToMoveTo = false;
+            parent.ProcessAction();
+            return;
+        }
+
+        transform.position = Vector2.LerpUnclamped(transform.position, direction, 1f);
     }
 
-    private Vector2 FindPosToMoveToUsingCurrentTile()
+    private void FindTileToMoveToUsingCurrentTile()
     {
         if (currentTile == null)
-            return transform.position;
+            return;
 
         List<Tile> neighbours = currentTile.Neighbours;
 
@@ -53,10 +78,14 @@ public class AISuperSimpleMove : MonoBehaviour, IMover
 
         Tile chosenOne = neighbours[new System.Random().Next(0, neighbours.Count)];
         if (chosenOne.transform.childCount > 0)
-            return transform.position;
+        {
+            attemptsToMove++;
+            return;
+        }
 
         lastTileWasOn = currentTile;
         tileToMoveTo = chosenOne;
-        return tileToMoveTo.transform.position;
+        hasFoundTileToMoveTo = true;
+        return;
     }
 }

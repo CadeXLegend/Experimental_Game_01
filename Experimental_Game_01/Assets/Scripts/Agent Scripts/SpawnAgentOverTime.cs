@@ -13,6 +13,7 @@ public class SpawnAgentOverTime : MonoBehaviour
     [SerializeField]
     private Agent.AgentConfig agentConfig;
     private Tile currentTile;
+    private int amountOfAgentsSpawned = 0;
 
     /// <summary>
     /// Initialize this Object with the defined parameters.
@@ -27,7 +28,10 @@ public class SpawnAgentOverTime : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (TurnTicker.Ticks % 10 == 0)
+        if (TurnTicker.Ticks == 1)
+            SpawnEnemy();
+        if (TurnTicker.Ticks > 1)
+            if (TurnTicker.Ticks % 10 == 0)
             SpawnEnemy();
     }
 
@@ -37,18 +41,22 @@ public class SpawnAgentOverTime : MonoBehaviour
         if (assetSpawner == null) return;
 
         try
-        {
+        {            
             GameObject go = assetSpawner.SpawnAssetGeneric(
-                asset: agentToSpawn,                    //the agent we want to spawn into the world
-                assetName: agentToSpawn.name,           //the name of the agent, e.g: skeleton
-                t: currentTile,                         //the current tile the thing this is attached to is on
-                spawnOntoRandomTileNeighbour: true      //whether we want this object to spawn automagically onto a randomly selected neighbour tile
+                asset: agentToSpawn,                            //the agent we want to spawn into the world
+                assetName: agentToSpawn.name,                   //the name of the agent, e.g: skeleton
+                t: currentTile,                                 //the current tile the thing this is attached to is on
+                spawnOntoRandomTileNeighbour: true              //whether we want this object to spawn automagically onto a randomly selected neighbour tile
                 );
 
             go.tag = "Enemy";
+            Agent.Agent spawnedAgent = go.GetComponent<Agent.Agent>();
             AISuperSimpleMove aiMover = go.AddComponent<AISuperSimpleMove>();
-            aiMover.Init(agentConfig, go.transform.parent.GetComponent<Tile>());
-            go.GetComponent<Agent.Agent>().Init(agentConfig, aiMover);
+            aiMover.Init(spawnedAgent, agentConfig, go.transform.parent.GetComponent<Tile>());
+            spawnedAgent.Init(agentConfig, aiMover);
+            TurnManagement.AgentTurnSetter.AddAgentToStateMachine(spawnedAgent);
+            amountOfAgentsSpawned++;
+            go.name += $" ({amountOfAgentsSpawned})";
         }
         catch { /*please don't do what I'm doing here*/ }
     }

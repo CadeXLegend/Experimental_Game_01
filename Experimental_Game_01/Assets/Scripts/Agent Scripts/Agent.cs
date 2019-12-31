@@ -35,6 +35,18 @@ namespace Agent
         private int maxHealth;
         private int attack;
         private int attackRange;
+        //defaults to 1 action per turn
+        private int actionsPerTurn = 1;
+        public int ActionsPerTurn { get => actionsPerTurn; }
+        private int actionsTakenInTurn = 0;
+        public int ActionsTakenInTurn { get => actionsTakenInTurn; }
+
+        public bool CanDoActions { get; set; }
+
+        private void Start()
+        {
+            TurnTicker.OnTick += ResetTurnActionPoints;
+        }
 
         /// <summary>
         /// Initializes an Agent with the given Parameters.
@@ -77,6 +89,16 @@ namespace Agent
             health = maxHealth;
             attack = agentData.Attack;
             attackRange = agentData.AttackRange;
+        }
+
+        public virtual void ProcessAction()
+        {
+            actionsTakenInTurn++;
+        }
+
+        public virtual void ResetTurnActionPoints()
+        {
+            actionsTakenInTurn = 0;
         }
     }
 }

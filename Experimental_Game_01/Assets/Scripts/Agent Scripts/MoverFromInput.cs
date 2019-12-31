@@ -25,6 +25,8 @@ namespace Agent
         //defaults to reading keyboard input
         private TypeOfInput inputType = TypeOfInput.Keyboard;
 
+        private Agent parent;
+
         private Rigidbody2D rb;
         [SerializeField, ReadOnly]
         private Tile currentTile;
@@ -37,27 +39,31 @@ namespace Agent
         [SerializeField]
         private float movementSpeed;
 
-        private bool hasReachedDestination = false;
+        private Vector2 previousTilePosition = Vector2.zero;
 
-        public void Init(AgentConfig config)
+        public void Init(Agent _parent, AgentConfig config)
         {
+            parent = _parent;
             agentConfiguration = config;
             rb = GetComponent<Rigidbody2D>();
         }
 
-        public void Init(AgentConfig config, TypeOfInput _inputType)
+        public void Init(Agent _parent, AgentConfig config, TypeOfInput _inputType)
         {
+            parent = _parent;
             agentConfiguration = config;
             rb = GetComponent<Rigidbody2D>();
             inputType = _inputType;
         }
 
-        public void Init(AgentConfig config, TypeOfInput _inputType, Tile _currentTile)
+        public void Init(Agent _parent, AgentConfig config, TypeOfInput _inputType, Tile _currentTile)
         {
+            parent = _parent;
             agentConfiguration = config;
             rb = GetComponent<Rigidbody2D>();
             inputType = _inputType;
             currentTile = _currentTile;
+            previousTilePosition = _currentTile.transform.position;
         }
 
         private void Start()
@@ -66,45 +72,16 @@ namespace Agent
             movementSpeed = agentConfiguration.MovementSpeed;
         }
 
-        int counter = 0;
-        float timer = 0.5f;
-        bool isCounting = false;
-        private void Update()
-        {
-            if (timer <= 0)
-            {
-                counter = 0;
-                timer = 0.5f;
-                isCounting = false;
-            }
-
-            if (Input.GetKeyDown(KeyCode.E))
-                counter++;
-
-            if (counter == 2 && Input.GetKeyUp(KeyCode.E))
-            {
-                isCounting = false;
-                counter = 0;
-                timer = 0.5f;
-            }
-
-            if (counter > 0 && counter < 2)
-                timer -= Time.deltaTime;
-
-            if (counter == 2)
-            {
-                isCounting = true;
-            }
-
-            if (isCounting)
-                Debug.Log(1);
-        }
-
         // Update is called once per frame
         private void FixedUpdate()
         {
+            if (!parent.CanDoActions)
+            {
+                currentTile.StopVisualizingNeighbours();
+                return;
+            }
 
-            Move(ValueFromInput());
+            Move(ValueFromInput());           
         }
 
         public virtual void Move(Vector2 direction)
@@ -112,8 +89,15 @@ namespace Agent
             if (!agentConfiguration.UsesRigidbody2D)
                 return;
 
-            if (Vector2.Distance(transform.position, direction) < 0.1f)
+            if (direction == previousTilePosition)
                 return;
+
+            if (Vector2.Distance(transform.position, direction) < 0.01f)
+            {
+                previousTilePosition = direction;
+                parent.ProcessAction();
+                return;
+            }
 
             transform.position = Vector2.LerpUnclamped(transform.position, direction, movementSpeed * Time.fixedDeltaTime);
             //rb.MovePosition(direction * (movementSpeed * Time.fixedDeltaTime));
@@ -143,7 +127,6 @@ namespace Agent
                 {
                     currentTile.StopVisualizingNeighbours();
                     currentTile = t;
-                    TurnTicker.Tick();
                     return currentTile.transform.position;
                 }
             }

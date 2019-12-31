@@ -59,10 +59,11 @@ namespace Agent
             #endregion
 
             #region Data Binding
-            mover.Init(agentData, MoverFromInput.TypeOfInput.ClickOnGrid, tileSpawnedOn);
+            mover.Init(agent, agentData, MoverFromInput.TypeOfInput.ClickOnGrid, tileSpawnedOn);
             agent.Init(agentData, mover);
             #endregion
 
+            TurnManagement.AgentTurnSetter.AddAgentToStateMachine(agent);
             return prefab;
         }
     }

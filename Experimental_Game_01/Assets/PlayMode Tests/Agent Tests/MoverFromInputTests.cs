@@ -20,9 +20,10 @@ namespace Tests
             config.MovementSpeed = 1;
             config.UsesRigidbody2D = true;
             GameObject go = new GameObject();
+            Agent.Agent agent = go.AddComponent<Agent.Agent>();
             go.AddComponent<Rigidbody2D>();
             MoverFromInput mover = go.AddComponent<MoverFromInput>();
-            mover.Init(config);
+            mover.Init(agent, config);
             go.transform.position = Vector2.zero;
             mover.Move(new Vector2(5, 5));
             yield return new WaitForSeconds(1f);

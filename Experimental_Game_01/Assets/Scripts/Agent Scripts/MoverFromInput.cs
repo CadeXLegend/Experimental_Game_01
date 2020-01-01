@@ -1,5 +1,6 @@
 ﻿using Generation;
 using System;
+using System.Linq;
 using UnityEngine;
 
 namespace Agent
@@ -43,6 +44,8 @@ namespace Agent
         private AgentConfig agentConfiguration;
         [SerializeField]
         private float movementSpeed;
+
+        private Vector2 directionToMoveTo = Vector2.zero;
 
         public void Init(Agent _parent, AgentConfig config)
         {
@@ -88,7 +91,10 @@ namespace Agent
                 return;
             }
 
-            Move(ValueFromInput());           
+            if (!hasGotTileToMoveTo)
+                ValueFromInput();
+
+            Move(directionToMoveTo);           
         }
 
         public virtual void Move(Vector2 direction)
@@ -98,6 +104,8 @@ namespace Agent
                 currentTile.VisualizeNeighbours();
                 return;
             }
+            else
+                currentTile.StopVisualizingNeighbours();
 
             if (Vector2.Distance(transform.position, direction) < 0.01f)
             {
@@ -113,19 +121,12 @@ namespace Agent
             //rb.MovePosition(direction * (movementSpeed * Time.fixedDeltaTime));
         }
 
-        private Vector2 ValueFromInput()
+        private void ValueFromInput()
         {
-            switch (inputType)
-            {
-                case TypeOfInput.Keyboard:
-                    return KeyboardInputToVector2();
-                case TypeOfInput.ClickOnGrid:
-                    return ClickOnGridInputToVector2();
-                default:
-                    //do nothing...
-                    break;
-            }
-            return Vector2.zero;
+            if (inputType.HasFlag(TypeOfInput.Keyboard))
+                directionToMoveTo = KeyboardInputToVector2();
+            if (inputType.HasFlag(TypeOfInput.ClickOnGrid))
+                directionToMoveTo = ClickOnGridInputToVector2();
         }
 
         private Vector2 ClickOnGridInputToVector2()
@@ -133,11 +134,11 @@ namespace Agent
             if (hasGotTileToMoveTo)
                 return tileToMoveTo.transform.position;
 
-            foreach(Tile t in currentTile.Neighbours)
+            foreach(TileNeighbour n in currentTile.Neighbours)
             {
+                Tile t = n.NeighbourTile;
                 if (t.Selected)
                 {
-                    currentTile.StopVisualizingNeighbours();
                     tileToMoveTo = t;
                     hasGotTileToMoveTo = true;
                     return tileToMoveTo.transform.position;
@@ -148,9 +149,51 @@ namespace Agent
 
         private Vector2 KeyboardInputToVector2()
         {
-            float x = Input.GetAxis("Horizontal");
-            float y = Input.GetAxis("Vertical");
-            return new Vector2(x, y);
+            if (hasGotTileToMoveTo)
+                return tileToMoveTo.transform.position;
+
+            if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
+            {
+                TileNeighbour t = currentTile.Neighbours.First(n => n.neighbourOrientation == TileNeighbour.NeighbourOrientation.Up);
+                if (t.NeighbourTile != null && !t.NeighbourTile.IsOccupied)
+                {
+                    tileToMoveTo = t.NeighbourTile;
+                    hasGotTileToMoveTo = true;
+                    return tileToMoveTo.transform.position;
+                }
+            }
+            else if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+            {
+                TileNeighbour t = currentTile.Neighbours.First(n => n.neighbourOrientation == TileNeighbour.NeighbourOrientation.Left);
+                if (t.NeighbourTile != null && !t.NeighbourTile.IsOccupied)
+                {
+                    tileToMoveTo = t.NeighbourTile;
+                    hasGotTileToMoveTo = true;
+                    return tileToMoveTo.transform.position;
+                }
+            }
+            else if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
+            {
+                TileNeighbour t = currentTile.Neighbours.First(n => n.neighbourOrientation == TileNeighbour.NeighbourOrientation.Down);
+                if (t.NeighbourTile != null && !t.NeighbourTile.IsOccupied)
+                {
+                    tileToMoveTo = t.NeighbourTile;
+                    hasGotTileToMoveTo = true;
+                    return tileToMoveTo.transform.position;
+                }
+            }
+            else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+            {
+                TileNeighbour t = currentTile.Neighbours.First(n => n.neighbourOrientation == TileNeighbour.NeighbourOrientation.Right);
+                if (t.NeighbourTile != null && !t.NeighbourTile.IsOccupied)
+                {
+                    tileToMoveTo = t.NeighbourTile;
+                    hasGotTileToMoveTo = true;
+                    return tileToMoveTo.transform.position;
+                }
+            }
+
+            return currentTile.transform.position;
         }
     }
 }

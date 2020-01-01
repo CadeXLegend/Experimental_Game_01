@@ -193,5 +193,17 @@ namespace Generation
                 //if no, retry with a different tile
                 return GetRandomUnoccupiedTile(position);
         }
+
+        public virtual List<Tile> GetAllUnoccupiedTiles()
+        {
+            List<Tile> UnoccupiedTiles = new List<Tile>();
+            foreach (Tile t in TileGrid)
+            {
+                if (!t.IsOccupied)
+                    UnoccupiedTiles.Add(t);
+            }
+
+            return UnoccupiedTiles;
+        }
     }
 }

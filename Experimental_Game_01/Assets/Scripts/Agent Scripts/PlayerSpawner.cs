@@ -53,13 +53,15 @@ namespace Agent
         {
             #region Instantiation & Component Initialization
             prefab = Instantiate(prefab, position, Quaternion.identity, parent);
+            if (prefab.tag != "Player")
+                prefab.tag = "Player";
             Agent agent = prefab.GetComponent<Agent>();
             MoverFromInput mover = prefab.AddComponent<MoverFromInput>();
             UnityEditor.CAutoInjectionEditor.InjectFor_CurrentScene();
             #endregion
 
             #region Data Binding
-            mover.Init(agent, agentData, MoverFromInput.TypeOfInput.ClickOnGrid, tileSpawnedOn);
+            mover.Init(agent, agentData, agentData.InputTypesForAgent, tileSpawnedOn);
             agent.Init(agentData, mover);
             #endregion
 

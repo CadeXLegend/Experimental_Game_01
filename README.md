@@ -8,18 +8,18 @@ Creating a game to experiment with new code techniques, and all that.
 This is a C# Project.
 
 ## Inspiration
-
-### Cardinal Quest 1: 
+```
+### Cardinal Quest 1
 http://cardinalquest.com/
 
-### Cardinal Quest 2: 
+### Cardinal Quest 2
 http://cardinalquest2.com/, 
 https://store.steampowered.com/app/378030/Cardinal_Quest_2/, 
 https://play.google.com/store/apps/details?id=com.kongregate.mobile.cardinalquest.google&hl=en
 
 ### Divinity: Original Sin 2
 https://store.steampowered.com/app/435150/Divinity_Original_Sin_2__Definitive_Edition/
-
+```
 ## Prerequisites
 
 To use this project on your local machine, make sure you have Unity 2019.3.0b12 installed.

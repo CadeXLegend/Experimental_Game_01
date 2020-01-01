@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Player Config
   m_EditorClassIdentifier: 
   AgentName: Player
+  specialType: 1
   Graphic: {fileID: 21301030, guid: 9afe77e76eb29394bb29beb2eb3cab36, type: 3}
   UsesRigidbody2D: 1
   AgentSize: {x: 0.8, y: 0.8}
@@ -22,3 +23,4 @@ MonoBehaviour:
   Attack: 1
   AttackRange: 4
   ActionsPerTurn: 3
+  InputTypesForAgent: 5

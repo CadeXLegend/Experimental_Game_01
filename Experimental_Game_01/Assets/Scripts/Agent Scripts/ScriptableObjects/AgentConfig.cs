@@ -17,6 +17,11 @@ namespace Agent
         [Tooltip("The Agent's Name to Identify said Agent and to be Displayed.")]
         public string AgentName;
         /// <summary>
+        /// The Agent's Special Type: Unique Abilities
+        /// </summary>
+        [Tooltip("The Agent's Special Type: Unique Abilities")]
+        public Agent.AgentSpecialType specialType;
+        /// <summary>
         /// The Agent's Graphic Sprite to be Rendered.
         /// </summary>
         [Tooltip("The Agent's Graphic Sprite to be Rendered.")]
@@ -64,5 +69,8 @@ namespace Agent
         /// </summary>
         [Tooltip("How many Actions this Agent can make in 1 Turn")]
         public int ActionsPerTurn;
+
+        [Header("Agent Input Types")]
+        [EnumMask] public MoverFromInput.TypeOfInput InputTypesForAgent;
     }
 }

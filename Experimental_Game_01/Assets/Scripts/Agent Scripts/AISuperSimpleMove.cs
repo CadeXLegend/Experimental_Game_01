@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Agent;
 using Generation;
+using System.Linq;
 
 public class AISuperSimpleMove : MonoBehaviour, IMover
 {
@@ -66,13 +67,14 @@ public class AISuperSimpleMove : MonoBehaviour, IMover
         if (currentTile == null)
             return;
 
-        List<Tile> neighbours = currentTile.Neighbours;
-
+        List<TileNeighbour> neighbours = currentTile.Neighbours;
+        var UnoccupiedTiles = neighbours.Where(n => !n.NeighbourTile.IsOccupied);
         Tile chosenOne = null;
         Vector2 lowestDistanceScore = new Vector2(999, 999);
         GameObject player = GameObject.Find("Player");
-        foreach (Tile t in neighbours)
+        foreach (var n in UnoccupiedTiles)
         {
+            Tile t = n.NeighbourTile;
             if (Vector2.Distance(t.transform.position, player.transform.position) < Vector2.Distance(lowestDistanceScore, player.transform.position))
             {
                 lowestDistanceScore = t.transform.position;
@@ -80,10 +82,7 @@ public class AISuperSimpleMove : MonoBehaviour, IMover
             }
         }
 
-        if (chosenOne.transform.childCount > 0)
-            chosenOne = neighbours[Random.Range(0, neighbours.Count)];
-
-        if (chosenOne.transform.childCount > 0)
+        if (chosenOne == null)
         {
             attemptsToMove++;
             return;

@@ -8,6 +8,14 @@ namespace Agent
     [RequireComponent(typeof(SpriteRenderer))]
     public class Agent : MonoBehaviour
     {
+        public enum AgentSpecialType
+        {
+            None,
+            Druid,
+            Lumberjack,
+        }
+        private AgentSpecialType specialType;
+
         private AgentConfig agentData;
         private GameObject agent;
         [SerializeField, GetComponent]
@@ -15,6 +23,8 @@ namespace Agent
         [SerializeField, GetComponent]
         private SpriteRenderer r;
         private IMover mover;
+
+        private GenerateResources resourcesGenerator;
 
         private int health;
         private int Health
@@ -40,12 +50,26 @@ namespace Agent
         public int ActionsPerTurn { get => actionsPerTurn; }
         private int actionsTakenInTurn = 0;
         public int ActionsTakenInTurn { get => actionsTakenInTurn; }
+        private int turnsTakenInGame = 0;
 
         public bool CanDoActions { get; set; }
+        private bool canGenerateAgain = false;
 
         private void Start()
         {
             TurnTicker.OnTick += ResetTurnActionPoints;
+
+            switch(specialType)
+            {
+                case AgentSpecialType.Druid:
+                    resourcesGenerator = GameObject.Find("Druid - Generate Resources").GetComponent<GenerateResources>();
+                    break;
+            }
+        }
+
+        private void LateUpdate()
+        {
+            DruidSpecialAbility();
         }
 
         /// <summary>
@@ -67,6 +91,7 @@ namespace Agent
             attack = agentData.Attack;
             attackRange = agentData.AttackRange;
             actionsPerTurn = agentData.ActionsPerTurn;
+            specialType = agentData.specialType;
         }
 
         /// <summary>
@@ -91,6 +116,7 @@ namespace Agent
             attack = agentData.Attack;
             attackRange = agentData.AttackRange;
             actionsPerTurn = agentData.ActionsPerTurn;
+            specialType = agentData.specialType;
         }
 
         public virtual void ProcessAction()
@@ -101,6 +127,30 @@ namespace Agent
         public virtual void ResetTurnActionPoints()
         {
             actionsTakenInTurn = 0;
+            turnsTakenInGame++;
+
+            if (!(specialType == AgentSpecialType.Druid))
+                return;
+
+            canGenerateAgain = true;
+        }
+
+        private void DruidSpecialAbility()
+        {
+            if (!(specialType == AgentSpecialType.Druid))
+                return;
+
+            //resourcesGenerator.Generate();
+
+            if (!CanDoActions)
+                return;
+            if (!canGenerateAgain)
+                return;
+            if (!(turnsTakenInGame % 1 == 0))
+                return;
+
+            resourcesGenerator.Generate();
+            canGenerateAgain = false;
         }
     }
 }

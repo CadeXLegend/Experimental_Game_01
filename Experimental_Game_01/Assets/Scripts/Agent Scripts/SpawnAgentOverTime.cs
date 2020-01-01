@@ -28,6 +28,9 @@ public class SpawnAgentOverTime : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (amountOfAgentsSpawned >= 2)
+            return;
+
         if (TurnTicker.Ticks == 1)
             SpawnEnemy();
         if (TurnTicker.Ticks > 1)
@@ -49,7 +52,8 @@ public class SpawnAgentOverTime : MonoBehaviour
                 spawnOntoRandomTileNeighbour: true              //whether we want this object to spawn automagically onto a randomly selected neighbour tile
                 );
 
-            go.tag = "Enemy";
+            if(go.tag != "Enemy")
+                go.tag = "Enemy";
             Agent.Agent spawnedAgent = go.GetComponent<Agent.Agent>();
             AISuperSimpleMove aiMover = go.AddComponent<AISuperSimpleMove>();
             aiMover.Init(spawnedAgent, agentConfig, go.transform.parent.GetComponent<Tile>());

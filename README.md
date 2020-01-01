@@ -8,7 +8,7 @@ Creating a game to experiment with new code techniques, and all that.
 This is a C# Project.
 
 ## Inspiration
-```
+
 ### Cardinal Quest 1
 http://cardinalquest.com/
 
@@ -19,7 +19,7 @@ https://play.google.com/store/apps/details?id=com.kongregate.mobile.cardinalques
 
 ### Divinity: Original Sin 2
 https://store.steampowered.com/app/435150/Divinity_Original_Sin_2__Definitive_Edition/
-```
+
 ## Prerequisites
 
 To use this project on your local machine, make sure you have Unity 2019.3.0b12 installed.

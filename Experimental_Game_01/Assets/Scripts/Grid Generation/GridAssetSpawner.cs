@@ -59,7 +59,7 @@ namespace Generation
         {
             Transform chosenTransform = t.transform;
             if (spawnOntoRandomTileNeighbour)
-                chosenTransform = t.Neighbours[new System.Random().Next(0, t.Neighbours.Count)].transform;
+                chosenTransform = t.Neighbours[new System.Random().Next(0, t.Neighbours.Count)].NeighbourTile.transform;
 
             if (chosenTransform.childCount > 0)
             {
@@ -141,25 +141,76 @@ namespace Generation
             Array.ForEach(grid.TileGrid, (column, row) =>
             {
                 #region Neighbour Setting
-                List<Tile> neighbours = new List<Tile>();
-                //up one
-                if (!(column + 1 > grid.Columns - 1))
-                    neighbours.Add(grid.TileGrid[column + 1, row]);
-                //down one
-                if (!(column - 1 < 0))
-                    neighbours.Add(grid.TileGrid[column - 1, row]);
-                //left one
-                if (!(row - 1 < 0))
-                    neighbours.Add(grid.TileGrid[column, row - 1]);
+                List<TileNeighbour> neighbours = new List<TileNeighbour>();
                 //right one
+                if (!(column + 1 > grid.Columns - 1))
+                {
+                    TileNeighbour tn = new TileNeighbour();
+                    tn.NeighbourTile = grid.TileGrid[column + 1, row]; //right
+                    tn.neighbourOrientation = TileNeighbour.NeighbourOrientation.Right;
+                    neighbours.Add(tn); //right
+                }
+                //left one
+                if (!(column - 1 < 0))
+                {
+                    TileNeighbour tn = new TileNeighbour();
+                    tn.NeighbourTile = grid.TileGrid[column - 1, row]; //left
+                    tn.neighbourOrientation = TileNeighbour.NeighbourOrientation.Left;
+                    neighbours.Add(tn);
+                }
+                //down one
+                if (!(row - 1 < 0))
+                {
+                    TileNeighbour tn = new TileNeighbour();
+                    tn.NeighbourTile = grid.TileGrid[column, row - 1]; //down
+                    tn.neighbourOrientation = TileNeighbour.NeighbourOrientation.Down;
+                    neighbours.Add(tn);
+                }
+                //up one
                 if (!(row + 1 > grid.Rows - 1))
-                    neighbours.Add(grid.TileGrid[column, row + 1]);
+                {
+                    TileNeighbour tn = new TileNeighbour();
+                    tn.NeighbourTile = grid.TileGrid[column, row + 1]; //up
+                    tn.neighbourOrientation = TileNeighbour.NeighbourOrientation.Up;
+                    neighbours.Add(tn);
+                }
+                //apparently it assigns it in right, left, down, up
                 grid.TileGrid[column, row].AssignNeighbours(neighbours);
                 #endregion
             });
             AssetsSpawned?.Invoke();
 
             return goArray;
+        }
+
+        /// <summary>
+        /// Spawn your own decoration directly onto a Tile.
+        /// </summary>
+        /// <param name="asset">The asset to spawn</param>
+        /// <param name="assetName">The name the asset will have post-spawn</param>
+        /// <param name="t">The Tile to spawn the asset onto</param>
+        public virtual GameObject SpawnSingleTileDecoration(GridAssetTheme.Theme theme, string assetName, Tile t)
+        {
+            if (t.transform.childCount > 0)
+            {
+                throw new UnityException("You cannot spawn an asset on an already occupied tile!");
+            }
+
+            SpawningAssets?.Invoke();
+            GameObject go = Instantiate(gridAssets.AssetPrefab, t.transform.position, Quaternion.identity, t.transform);
+#if UNITY_EDITOR
+            //don't need to do this in build
+            go.name = $"{assetName} (Custom)";
+#endif
+            go.tag = "Resource";
+            BoxCollider2D collider = go.AddComponent<BoxCollider2D>();
+            collider.size = gridAssets.Themes[(int)theme].TileDecorations[0].ColliderSize;
+            SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
+            sr.sprite = gridAssets.Themes[(int)theme].TileDecorations[0].Sprite;
+            go.transform.localScale *= gridAssets.Themes[(int)theme].TileDecorations[0].SpriteScale;
+            sr.sortingOrder = 1;
+            AssetsSpawned?.Invoke();
+            return go;
         }
 
         /// <summary>
@@ -186,6 +237,7 @@ namespace Generation
                 //don't need to do this in build
                 go.name = $"{assetName} (X: {column}  Y:{row})";
 #endif
+                go.tag = "Resource";
                 BoxCollider2D collider = go.AddComponent<BoxCollider2D>();
                 collider.size = gridAssets.Themes[(int)theme].TileDecorations[0].ColliderSize;
                 SpriteRenderer sr = go.GetComponent<SpriteRenderer>();

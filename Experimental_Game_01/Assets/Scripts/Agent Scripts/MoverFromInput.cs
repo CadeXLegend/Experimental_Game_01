@@ -83,7 +83,7 @@ namespace Agent
         }
 
         // Update is called once per frame
-        private void FixedUpdate()
+        private void Update()
         {
             if (!parent.CanDoActions)
             {
@@ -99,6 +99,7 @@ namespace Agent
 
         public virtual void Move(Vector2 direction)
         {
+            
             if (!hasGotTileToMoveTo)
             {
                 currentTile.VisualizeNeighbours();
@@ -106,7 +107,7 @@ namespace Agent
             }
             else
                 currentTile.StopVisualizingNeighbours();
-
+                
             if (Vector2.Distance(transform.position, direction) < 0.01f)
             {
                 previousTile = currentTile;
@@ -117,8 +118,7 @@ namespace Agent
                 return;
             }
 
-            transform.position = Vector2.LerpUnclamped(transform.position, direction, movementSpeed * Time.fixedDeltaTime);
-            //rb.MovePosition(direction * (movementSpeed * Time.fixedDeltaTime));
+            transform.position = Vector2.LerpUnclamped(transform.position, direction, movementSpeed * Time.deltaTime);
         }
 
         private void ValueFromInput()
@@ -127,6 +127,9 @@ namespace Agent
                 directionToMoveTo = KeyboardInputToVector2();
             if (inputType.HasFlag(TypeOfInput.ClickOnGrid))
                 directionToMoveTo = ClickOnGridInputToVector2();
+
+            if(Input.GetKeyDown(KeyCode.Keypad0))
+                parent.ProcessAction();
         }
 
         private Vector2 ClickOnGridInputToVector2()
@@ -152,47 +155,44 @@ namespace Agent
             if (hasGotTileToMoveTo)
                 return tileToMoveTo.transform.position;
 
-            if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
+            if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
             {
-                TileNeighbour t = currentTile.Neighbours.First(n => n.neighbourOrientation == TileNeighbour.NeighbourOrientation.Up);
-                if (t.NeighbourTile != null && !t.NeighbourTile.IsOccupied)
-                {
-                    tileToMoveTo = t.NeighbourTile;
-                    hasGotTileToMoveTo = true;
-                    return tileToMoveTo.transform.position;
-                }
+                return GetTileToMoveToPos(TileNeighbour.NeighbourOrientation.Up);
             }
-            else if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+            else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
             {
-                TileNeighbour t = currentTile.Neighbours.First(n => n.neighbourOrientation == TileNeighbour.NeighbourOrientation.Left);
-                if (t.NeighbourTile != null && !t.NeighbourTile.IsOccupied)
-                {
-                    tileToMoveTo = t.NeighbourTile;
-                    hasGotTileToMoveTo = true;
-                    return tileToMoveTo.transform.position;
-                }
+                return GetTileToMoveToPos(TileNeighbour.NeighbourOrientation.Left);
             }
-            else if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
+            else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
             {
-                TileNeighbour t = currentTile.Neighbours.First(n => n.neighbourOrientation == TileNeighbour.NeighbourOrientation.Down);
-                if (t.NeighbourTile != null && !t.NeighbourTile.IsOccupied)
-                {
-                    tileToMoveTo = t.NeighbourTile;
-                    hasGotTileToMoveTo = true;
-                    return tileToMoveTo.transform.position;
-                }
+                return GetTileToMoveToPos(TileNeighbour.NeighbourOrientation.Down);
             }
-            else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+            else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
             {
-                TileNeighbour t = currentTile.Neighbours.First(n => n.neighbourOrientation == TileNeighbour.NeighbourOrientation.Right);
-                if (t.NeighbourTile != null && !t.NeighbourTile.IsOccupied)
-                {
-                    tileToMoveTo = t.NeighbourTile;
-                    hasGotTileToMoveTo = true;
-                    return tileToMoveTo.transform.position;
-                }
+                return GetTileToMoveToPos(TileNeighbour.NeighbourOrientation.Right);
             }
 
+            return currentTile.transform.position;
+        }
+
+        private Vector3 GetTileToMoveToPos(TileNeighbour.NeighbourOrientation orientation)
+        {
+            TileNeighbour t = currentTile.Neighbours.First(n => n.neighbourOrientation == orientation);
+            if (t.NeighbourTile == null)
+                return currentTile.transform.position;
+
+            if (t.NeighbourTile.IsOccupiedByPlayer)
+            {
+                tileToMoveTo = t.NeighbourTile;
+                hasGotTileToMoveTo = true;
+                return tileToMoveTo.transform.position;
+            }
+            else if (!t.NeighbourTile.IsOccupied)
+            {
+                tileToMoveTo = t.NeighbourTile;
+                hasGotTileToMoveTo = true;
+                return tileToMoveTo.transform.position;
+            }
             return currentTile.transform.position;
         }
     }

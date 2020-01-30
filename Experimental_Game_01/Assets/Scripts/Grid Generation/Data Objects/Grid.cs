@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Generation
@@ -145,6 +146,39 @@ namespace Generation
                         }
                     }
             }
+        }
+
+        /// <summary>
+        /// Swaps the current Tile Theme to whichever theme you give it.  Warning:  This will change the Tile's Sprites.
+        /// </summary>
+        /// <param name="theme">The Tile Theme you wish to activate.</param>
+        public virtual IEnumerator HotSwapTileThemeEnumerable(GridAssetTheme.Theme theme)
+        {
+            foreach (Tile t in TileGrid)
+            {
+                t.spriteRenderer.sprite = Container.AssignedGridAssets.Themes[(int)theme].Sprites[t.TilePositionOnGrid.GetUnshiftedNumber()];
+                if (t.transform.childCount > 0)
+                    for (int i = 0; i < t.transform.childCount; ++i)
+                    {
+                        if (t.transform.GetChild(i).name.Contains("Decoration"))
+                        {
+                            SpriteRenderer r = t.transform.GetChild(i).GetComponent<SpriteRenderer>();
+                            r.sprite = Container.AssignedGridAssets.Themes[(int)theme].TileDecorations[0].Sprite;
+                        }
+                    }
+                yield return new WaitForSeconds(0.01f);
+            }
+        }
+
+        public virtual IEnumerator BattleRoyaleHotSwapTileThemeEnumerable()
+        {
+
+            return null;
+        }
+
+        public virtual IEnumerator CircleHotSwapTileThemeEnumerable(TileNeighbour.NeighbourOrientation orientation)
+        {
+            return null;
         }
 
         /// <summary>

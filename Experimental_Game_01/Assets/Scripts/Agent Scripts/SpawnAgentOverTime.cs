@@ -30,7 +30,7 @@ public class SpawnAgentOverTime : MonoBehaviour
     {
         if (amountOfAgentsSpawned >= 2)
             return;
-
+        
         if (TurnTicker.Ticks == 1)
             SpawnEnemy();
         if (TurnTicker.Ticks > 1)

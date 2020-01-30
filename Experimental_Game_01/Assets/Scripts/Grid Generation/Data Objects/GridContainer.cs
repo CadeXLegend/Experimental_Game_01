@@ -26,7 +26,7 @@ namespace Generation
             {
                 themeCycleCounter = themeCycleCounter < AssignedGridAssets.Themes.Length - 1 ? themeCycleCounter + 1 : 0;
                 GridAssetTheme.Theme currentTheme = (GridAssetTheme.Theme)themeCycleCounter;
-                AssignedGrid.HotSwapTileTheme(currentTheme);
+                StartCoroutine(AssignedGrid.HotSwapTileThemeEnumerable(currentTheme));
             }
 
             if(Input.GetKeyDown(KeyCode.Q))

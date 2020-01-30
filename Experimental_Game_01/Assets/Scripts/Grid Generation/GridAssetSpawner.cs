@@ -174,7 +174,39 @@ namespace Generation
                     tn.neighbourOrientation = TileNeighbour.NeighbourOrientation.Up;
                     neighbours.Add(tn);
                 }
-                //apparently it assigns it in right, left, down, up
+                //up one, left one (top left)
+                if (!(column - 1 < 0) && !(row + 1 > grid.Rows - 1))
+                {
+                    TileNeighbour tn = new TileNeighbour();
+                    tn.NeighbourTile = grid.TileGrid[column - 1, row + 1]; //left 1 and up 1
+                    tn.neighbourOrientation = TileNeighbour.NeighbourOrientation.TopLeft;
+                    neighbours.Add(tn);
+                }
+                //up one, right one (top right)
+                if (!(column + 1 > grid.Columns - 1) && !(row + 1 > grid.Rows - 1))
+                {
+                    TileNeighbour tn = new TileNeighbour();
+                    tn.NeighbourTile = grid.TileGrid[column + 1, row + 1]; //right 1 and up 1
+                    tn.neighbourOrientation = TileNeighbour.NeighbourOrientation.TopRight;
+                    neighbours.Add(tn);
+                }
+                //down one, left one (bottom left)
+                if (!(row - 1 < 0) && !(column - 1 < 0))
+                {
+                    TileNeighbour tn = new TileNeighbour();
+                    tn.NeighbourTile = grid.TileGrid[column - 1, row - 1]; //left 1 and down 1
+                    tn.neighbourOrientation = TileNeighbour.NeighbourOrientation.BottomLeft;
+                    neighbours.Add(tn);
+                }
+                //down one, right one (bottom right)
+                if (!(row - 1 < 0) && !(column + 1 > grid.Columns - 1))
+                {
+                    TileNeighbour tn = new TileNeighbour();
+                    tn.NeighbourTile = grid.TileGrid[column + 1, row - 1]; //right 1 and down 1
+                    tn.neighbourOrientation = TileNeighbour.NeighbourOrientation.BottomRight;
+                    neighbours.Add(tn);
+                }
+
                 grid.TileGrid[column, row].AssignNeighbours(neighbours);
                 #endregion
             });

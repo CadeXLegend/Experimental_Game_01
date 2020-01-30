@@ -1,0 +1,22 @@
+Interaction Filter:
+
+- Contains interaction states/flags
+- Subscribes interactions
+- Filters input(s) through interactions
+
+
+
+Example:
+
+Pre-requisits like components, scripts, etc for Interactions are assigned through the Subscription
+Then, whenever Subscriber-related input is received, it is then processed through the Filter
+Which sends the input to the interactions for functionalities to be fulfilled
+
+Input -> Get Tile N
+		-> Filter(N): run N through Filter
+			-> For all Interactions, send N
+				-> Interaction event occurs for N
+					-> Feedback response occurs
+
+
+

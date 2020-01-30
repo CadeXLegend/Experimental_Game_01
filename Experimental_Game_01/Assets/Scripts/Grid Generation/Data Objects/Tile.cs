@@ -24,6 +24,7 @@ namespace Generation
         }
 
         //the properties with [SerializeField] [ReadOnly] are for debugging & information purposes in the inspector
+        [SerializeField]
         private List<TileNeighbour> neighbours;
         public List<TileNeighbour> Neighbours { get => neighbours; }
         [Header("Tile Information")]
@@ -41,6 +42,8 @@ namespace Generation
         public bool Selected { get => selected; }
         [SerializeField] private bool isOccupied;
         public bool IsOccupied { get => isOccupied; }
+        [SerializeField] private bool isOccupiedByPlayer;
+        public bool IsOccupiedByPlayer { get => isOccupiedByPlayer; }
 
         public void Init(PositionOnGrid _TilePositionOnGrid)
         {
@@ -55,12 +58,23 @@ namespace Generation
         private void Update()
         {
             isOccupied = transform.childCount == 0 ? false : true;
+            if(isOccupied)
+                isOccupiedByPlayer = transform.GetChild(0).tag == "Player";
         }
 
         public void AssignNeighbours(List<TileNeighbour> _neighbours)
         {
             neighbours = _neighbours;
         }
+
+        TileNeighbour.NeighbourOrientation nonoFlag =
+        (
+        TileNeighbour.NeighbourOrientation.TopLeft    |
+        TileNeighbour.NeighbourOrientation.TopRight   |
+        TileNeighbour.NeighbourOrientation.BottomLeft |
+        TileNeighbour.NeighbourOrientation.BottomRight
+        );
+
 
         Dictionary<Tile, Color32> lastSelectedTiles = new Dictionary<Tile, Color32>();
         public virtual void VisualizeNeighbours()
@@ -73,9 +87,14 @@ namespace Generation
             foreach (TileNeighbour n in neighbours)
             {
                 Tile t = n.NeighbourTile;
+
+                if (nonoFlag.HasFlag(n.neighbourOrientation))
+                    continue;
+
                 if (!t.IsOccupied)
                 {
-                    lastSelectedTiles.Add(t, t.spriteRenderer.color);
+                    if (!lastSelectedTiles.ContainsKey(t))
+                        lastSelectedTiles.Add(t, t.spriteRenderer.color);
                     t.highlighted = true;
                     t.spriteRenderer.color = new Color32(255, 255, 255, 100);
                 }
@@ -83,15 +102,24 @@ namespace Generation
                 {
                     if (t.transform.GetChild(0).tag == "Enemy")
                     {
-                        lastSelectedTiles.Add(t, t.spriteRenderer.color);
+                        if (!lastSelectedTiles.ContainsKey(t))
+                            lastSelectedTiles.Add(t, t.spriteRenderer.color);
                         t.highlighted = true;
                         t.spriteRenderer.color = new Color32(255, 0, 0, 200);
                     }
                     else if (t.transform.GetChild(0).tag == "Resource")
                     {
-                        lastSelectedTiles.Add(t, t.spriteRenderer.color);
+                        if (!lastSelectedTiles.ContainsKey(t))
+                            lastSelectedTiles.Add(t, t.spriteRenderer.color);
                         t.highlighted = true;
                         t.spriteRenderer.color = new Color32(0, 255, 0, 200);
+                    }
+                    else if (t.transform.GetChild(0).tag == "Player")
+                    {
+                        if (!lastSelectedTiles.ContainsKey(t))
+                            lastSelectedTiles.Add(t, t.spriteRenderer.color);
+                        t.highlighted = true;
+                        t.spriteRenderer.color = new Color32(255, 255, 255, 100);
                     }
                 }
             }

@@ -5,47 +5,124 @@ using TriangleNet.Geometry;
 using TriangleNet.Topology;
 using MyBox;
 using System.Linq;
+using DataConversion;
+using System.Threading.Tasks;
 
 public class GenerateMeshFromPointCloud : MonoBehaviour
 {
-    [SerializeField] private ConvertCSVToVector3List csvList;
+    [SerializeField] private Object csvDataForMesh;
     private Vector3[] points;
     public enum PointState { FIXED, FREE };
     private PointState[] pointState;
     private Color[] colors;
     private Vector3[] normals;
     private int[] triangles;
-    [SerializeField] private GameObject targetToGenerateOnto;
+    [SerializeField] private MeshFilter targetMesh;
     //low: chunkSize = 5000, resOfVerticeData = 1
     //medium: chunkSize = 1024, resOfVerticeData = 1
     //high: chunkSize = 80, resOfVerticeData = 1
     //very high: chunkSize = 32, resOfVerticeData = 1
     public enum MapDetail { Low, Medium, High, VeryHigh };
     public MapDetail detailOfMap = MapDetail.Medium;
-    private readonly (int, int)[] detailPairs = { (5000, 1), (1024, 1), (80, 1), (32, 1) };
+    private readonly int[] detailPairs = {5000, 1024, 80, 32 };
     [SerializeField] private Gradient gradient;
 
-    [ButtonMethod]
-    public async virtual void BuildMeshFromDataSet()
+
+    int detailCycleCounter = -1;
+    private void TestThisKeys()
     {
-        //convert the csv supplied to vec3 data chunks
-        List<Point[]> chunks = await csvList.ConvertDataToVector3(detailPairs[(int)detailOfMap].Item1);
-        //get the data chunks in requested resolution
-        points = csvList.GetResolutionAdjustedVertices(chunks, detailPairs[(int)detailOfMap].Item2).Select(val => val.AsVector3()).ToArray();
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            detailCycleCounter = detailCycleCounter < 3 ? detailCycleCounter + 1 : 0;
+            detailOfMap = (MapDetail)detailCycleCounter;
+            BuildMeshFromData();
+            return;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            detailOfMap = MapDetail.Low;
+            BuildMeshFromData();
+            return;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            detailOfMap = MapDetail.Medium;
+            BuildMeshFromData();
+            return;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            detailOfMap = MapDetail.High;
+            BuildMeshFromData();
+            return;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            detailOfMap = MapDetail.VeryHigh;
+            BuildMeshFromData();
+            return;
+        }
+    }
+
+    private void Update()
+    {
+        TestThisKeys();
+    }
+
+    List<List<DataConversion.Point>> chunks1;
+    List<List<DataConversion.Point>> chunks2;
+    List<List<DataConversion.Point>> chunks3;
+    List<List<DataConversion.Point>> chunks4;
+    [ButtonMethod]
+    public async virtual void BuildMeshFromData()
+    {
+        //convert the csv supplied to Point chunks
+        if(chunks1 == null)
+            chunks1 = await CSVToPointChunks.ConvertDataToPointChunksLossy(csvDataForMesh, detailPairs[0], detailPairs[0]);
+        if (chunks2 == null)
+            chunks2 = await CSVToPointChunks.ConvertDataToPointChunksLossy(csvDataForMesh, detailPairs[1], detailPairs[1]);
+        if (chunks3 == null)
+            chunks3 = await CSVToPointChunks.ConvertDataToPointChunksLossy(csvDataForMesh, detailPairs[2], detailPairs[2]);
+        if (chunks4 == null)
+            chunks4 = await CSVToPointChunks.ConvertDataToPointChunksLossy(csvDataForMesh, detailPairs[3], detailPairs[3]);
+        //System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
+        //stopwatch.Start();
+        if(detailOfMap == MapDetail.Low)
+            points = chunks1.SelectMany(val => val.Select(v => v.ToVector3()).ToArray()).Cast<Vector3>().ToArray();
+        if (detailOfMap == MapDetail.Medium)
+            points = chunks2.SelectMany(val => val.Select(v => v.ToVector3()).ToArray()).Cast<Vector3>().ToArray();
+        if (detailOfMap == MapDetail.High)
+            points = chunks3.SelectMany(val => val.Select(v => v.ToVector3()).ToArray()).Cast<Vector3>().ToArray();
+        if (detailOfMap == MapDetail.VeryHigh)
+            points = chunks4.SelectMany(val => val.Select(v => v.ToVector3()).ToArray()).Cast<Vector3>().ToArray();
 
         pointState = new PointState[points.Length];
         for (int i = 0; i < points.Length; ++i)
         {
             pointState[i] = PointState.FIXED;
         }
-        //Iniates the CreateMesh scripts
-        CreateMesh();
+
+        if (targetMesh.sharedMesh.isReadable)
+        {
+            targetMesh.sharedMesh.Clear();
+            targetMesh.sharedMesh.MarkDynamic();
+            CreateMesh();
+            targetMesh.sharedMesh.MarkModified();
+        }
+        else
+            Debug.Log("Make sure to make the mesh Read/Write!");
+        //stopwatch.Stop();
+        //Debug.Log($"Transforming Data from CSV to Terrain -> It Took: {stopwatch.ElapsedMilliseconds / 1000} seconds, {stopwatch.ElapsedMilliseconds} milliseconds");
+        //stopwatch.Restart();
     }
 
+    List<Vector3> newPoints;
+    Vector3[] temp;
+    PointState[] tempState;
     //Adds Centroids to the middle of the triangles and adds them to other separate array of vector3s
     private void addCentroids()
     {
-        List<Vector3> newPoints = new List<Vector3>();
+        newPoints = new List<Vector3>();
         for (int i = 0; i < triangles.Length; i += 3)
         {
             Vector3 other = points[triangles[i]];
@@ -58,8 +135,8 @@ public class GenerateMeshFromPointCloud : MonoBehaviour
         }
         //Creates new variable newLength to hold the variable length of the arrays and more centroids are added so that propper memory can be allocated
         int newLength = points.Length + newPoints.Count;
-        Vector3[] temp = new Vector3[newLength];
-        PointState[] tempState = new PointState[newLength];
+        temp = new Vector3[newLength];
+        tempState = new PointState[newLength];
         for (int i = 0; i < points.Length; i++)
         {
             temp[i] = points[i];
@@ -74,10 +151,12 @@ public class GenerateMeshFromPointCloud : MonoBehaviour
         pointState = tempState;
     }
 
+    List<Vertex> vertices;
+    ICollection<Triangle> tri;
+    GenericMesher gm;
+    IMesh imesh;
     private void CreateMesh()
     {
-        targetToGenerateOnto.GetComponent<MeshFilter>().sharedMesh = new UnityEngine.Mesh();
-
         colors = new Color[points.Length];
         normals = new Vector3[points.Length];
 
@@ -91,16 +170,18 @@ public class GenerateMeshFromPointCloud : MonoBehaviour
             normals[i] = new Vector3(0, 1, 0);
         }
 
-        GenericMesher gm = new GenericMesher();
-        List<Vertex> vertices = new List<Vertex>();
+        if(gm == null)
+            gm = new GenericMesher();
+
+        vertices = new List<Vertex>();
         for (int i = 0; i < points.Length; i++)
         {
             Vertex v = new Vertex(points[i].x, points[i].z);
             vertices.Add(v);
         }
 
-        IMesh imesh = gm.Triangulate(vertices);
-        ICollection<Triangle> tri = imesh.Triangles;
+        imesh = gm.Triangulate(vertices);
+        tri = imesh.Triangles;
         int ntri = tri.Count;
         triangles = new int[3 * ntri];
         int ctri = 0;
@@ -112,19 +193,21 @@ public class GenerateMeshFromPointCloud : MonoBehaviour
             ctri += 3;
         }
 
-        UnityEngine.Mesh mesh = targetToGenerateOnto.GetComponent<MeshFilter>().sharedMesh;
-        mesh.vertices = points;
-        mesh.triangles = triangles;
-        mesh.normals = normals;
-        mesh.colors = colors;
-        mesh.RecalculateNormals();
-        mesh.RecalculateBounds();
+        targetMesh.sharedMesh.vertices = points;
+        targetMesh.sharedMesh.triangles = triangles;
+        targetMesh.sharedMesh.normals = normals;
+        targetMesh.sharedMesh.colors = colors;
+        ///ignoring normals for now, don't really need them atm
+        //mesh.RecalculateNormals();
+        ///if you need collision, un-comment RecalculateBounds();
+        //mesh.RecalculateBounds();
     }
 
     List<int>[] nearby;
+    float[] storage;
     private void Smooth(int ntrials, bool newCounts, bool smoothFixed)
     {
-        float[] storage = new float[points.Length];
+        storage = new float[points.Length];
         if (newCounts) nearby = new List<int>[points.Length];
         for (int iter = 0; iter < ntrials; iter++)
         {

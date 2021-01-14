@@ -44,7 +44,7 @@ If there are any specific dependencies or particular assembly configurations req
 
 ## License
 
-[Creative Commons CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) Creative Commons CC BY 4.0
+[Creative Commons CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
 
 ## Acknowledgments
 

@@ -94,7 +94,7 @@ namespace Agent
             if (!hasGotTileToMoveTo)
                 ValueFromInput();
 
-            Move(directionToMoveTo);           
+            Move(directionToMoveTo);
         }
 
         public virtual void Move(Vector2 direction)
@@ -142,11 +142,15 @@ namespace Agent
                 Tile t = n.NeighbourTile;
                 if (t.Selected)
                 {
+                    if (t.IsOccupied || t.IsOccupiedByPlayer)
+                        continue;
+
                     tileToMoveTo = t;
                     hasGotTileToMoveTo = true;
                     return tileToMoveTo.transform.position;
                 }
             }
+            hasGotTileToMoveTo = false;
             return currentTile.transform.position;
         }
 
@@ -171,6 +175,26 @@ namespace Agent
             {
                 return GetTileToMoveToPos(TileNeighbour.NeighbourOrientation.Right);
             }
+            else if (Input.GetKey(KeyCode.W) && (Input.GetKey(KeyCode.A) 
+                || Input.GetKey(KeyCode.UpArrow)) && Input.GetKey(KeyCode.LeftArrow))
+            {
+                return GetTileToMoveToPos(TileNeighbour.NeighbourOrientation.TopLeft);
+            }
+            else if (Input.GetKey(KeyCode.W) && (Input.GetKey(KeyCode.D) 
+                || Input.GetKey(KeyCode.UpArrow)) && Input.GetKey(KeyCode.RightArrow))
+            {
+                return GetTileToMoveToPos(TileNeighbour.NeighbourOrientation.TopRight);
+            }
+            else if (Input.GetKey(KeyCode.S) && (Input.GetKey(KeyCode.A) 
+                || Input.GetKey(KeyCode.DownArrow)) && Input.GetKey(KeyCode.LeftArrow))
+            {
+                return GetTileToMoveToPos(TileNeighbour.NeighbourOrientation.BottomLeft);
+            }
+            else if (Input.GetKey(KeyCode.S) && (Input.GetKey(KeyCode.D) 
+                || Input.GetKeyDown(KeyCode.DownArrow)) && Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                return GetTileToMoveToPos(TileNeighbour.NeighbourOrientation.BottomRight);
+            }
 
             return currentTile.transform.position;
         }
@@ -178,22 +202,18 @@ namespace Agent
         private Vector3 GetTileToMoveToPos(TileNeighbour.NeighbourOrientation orientation)
         {
             TileNeighbour t = currentTile.Neighbours.First(n => n.neighbourOrientation == orientation);
-            if (t.NeighbourTile == null)
+            return ComputeValidityOfTileMoves(t);
+        }
+
+        private Vector3 ComputeValidityOfTileMoves(TileNeighbour t)
+        {
+            if (!t.NeighbourTile || t.NeighbourTile.IsOccupied || t.NeighbourTile.IsOccupiedByPlayer)
                 return currentTile.transform.position;
 
-            if (t.NeighbourTile.IsOccupiedByPlayer)
-            {
-                tileToMoveTo = t.NeighbourTile;
-                hasGotTileToMoveTo = true;
-                return tileToMoveTo.transform.position;
-            }
-            else if (!t.NeighbourTile.IsOccupied)
-            {
-                tileToMoveTo = t.NeighbourTile;
-                hasGotTileToMoveTo = true;
-                return tileToMoveTo.transform.position;
-            }
-            return currentTile.transform.position;
+            tileToMoveTo = t.NeighbourTile;
+            hasGotTileToMoveTo = true;
+
+            return tileToMoveTo.transform.position;
         }
     }
 }

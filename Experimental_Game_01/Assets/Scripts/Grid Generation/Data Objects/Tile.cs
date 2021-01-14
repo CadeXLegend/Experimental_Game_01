@@ -58,8 +58,7 @@ namespace Generation
         private void Update()
         {
             isOccupied = transform.childCount == 0 ? false : true;
-            if(isOccupied)
-                isOccupiedByPlayer = transform.GetChild(0).tag == "Player";
+            isOccupiedByPlayer = isOccupied ? transform.GetChild(0).CompareTag("Player") ? true : true : false;
         }
 
         public void AssignNeighbours(List<TileNeighbour> _neighbours)
@@ -88,8 +87,10 @@ namespace Generation
             {
                 Tile t = n.NeighbourTile;
 
-                if (nonoFlag.HasFlag(n.neighbourOrientation))
-                    continue;
+                //this is for if we want 4-directional movement
+                //rather than 8-directional movement
+                //if (nonoFlag.HasFlag(n.neighbourOrientation))
+                //    continue;
 
                 if (!t.IsOccupied)
                 {
@@ -100,26 +101,26 @@ namespace Generation
                 }
                 else
                 {
-                    if (t.transform.GetChild(0).tag == "Enemy")
+                    switch (t.transform.GetChild(0).tag)
                     {
-                        if (!lastSelectedTiles.ContainsKey(t))
-                            lastSelectedTiles.Add(t, t.spriteRenderer.color);
-                        t.highlighted = true;
-                        t.spriteRenderer.color = new Color32(255, 0, 0, 200);
-                    }
-                    else if (t.transform.GetChild(0).tag == "Resource")
-                    {
-                        if (!lastSelectedTiles.ContainsKey(t))
-                            lastSelectedTiles.Add(t, t.spriteRenderer.color);
-                        t.highlighted = true;
-                        t.spriteRenderer.color = new Color32(0, 255, 0, 200);
-                    }
-                    else if (t.transform.GetChild(0).tag == "Player")
-                    {
-                        if (!lastSelectedTiles.ContainsKey(t))
-                            lastSelectedTiles.Add(t, t.spriteRenderer.color);
-                        t.highlighted = true;
-                        t.spriteRenderer.color = new Color32(255, 255, 255, 100);
+                        case "Enemy":
+                            if (!lastSelectedTiles.ContainsKey(t))
+                                lastSelectedTiles.Add(t, t.spriteRenderer.color);
+                            t.highlighted = true;
+                            t.spriteRenderer.color = new Color32(255, 0, 0, 200);
+                            break;
+                        case "Resource":
+                            if (!lastSelectedTiles.ContainsKey(t))
+                                lastSelectedTiles.Add(t, t.spriteRenderer.color);
+                            t.highlighted = true;
+                            t.spriteRenderer.color = new Color32(0, 255, 0, 200);
+                            break;
+                        case "Player":
+                            if (!lastSelectedTiles.ContainsKey(t))
+                                lastSelectedTiles.Add(t, t.spriteRenderer.color);
+                            t.highlighted = true;
+                            t.spriteRenderer.color = new Color32(0, 0, 255, 100);
+                            break;
                     }
                 }
             }

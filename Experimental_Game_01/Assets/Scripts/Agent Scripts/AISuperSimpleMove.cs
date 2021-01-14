@@ -9,8 +9,11 @@ public class AISuperSimpleMove : MonoBehaviour, IMover
 {
     private Agent.Agent parent;
     private AgentConfig config;
+    [SerializeField]
     private Tile lastTileWasOn;
+    [SerializeField]
     private Tile currentTile;
+    [SerializeField]
     private Tile tileToMoveTo;
     private int attemptsToMove = 0;
     private bool hasFoundTileToMoveTo = false;
@@ -36,18 +39,23 @@ public class AISuperSimpleMove : MonoBehaviour, IMover
             parent.ProcessAction();
         }
 
-        if (tileToMoveTo != null)
+        if (tileToMoveTo)
+        {
             Move(tileToMoveTo.transform.position);
+            hasFoundTileToMoveTo = false;
+            tileToMoveTo = null;
+        }
 
         if (hasFoundTileToMoveTo)
             return;
 
-        FindTileToMoveToUsingCurrentTile();
+        if (!tileToMoveTo)
+            FindTileToMoveToUsingCurrentTile();
     }
 
     public virtual void Move(Vector2 direction)
     {
-        if (tileToMoveTo == null)
+        if (!tileToMoveTo)
             return;
 
         if (Vector2.Distance(transform.position, direction) < 0.01f)
@@ -64,11 +72,11 @@ public class AISuperSimpleMove : MonoBehaviour, IMover
 
     private void FindTileToMoveToUsingCurrentTile()
     {
-        if (currentTile == null)
+        if (!currentTile)
             return;
 
         List<TileNeighbour> neighbours = currentTile.Neighbours;
-        var UnoccupiedTiles = neighbours.Where(n => !n.NeighbourTile.IsOccupied);
+        var UnoccupiedTiles = neighbours.Where(n => !n.NeighbourTile.IsOccupied && !n.NeighbourTile.IsOccupiedByPlayer);
         Tile chosenOne = null;
         Vector2 lowestDistanceScore = new Vector2(999, 999);
         GameObject player = GameObject.Find("Player");
@@ -82,7 +90,7 @@ public class AISuperSimpleMove : MonoBehaviour, IMover
             }
         }
 
-        if (chosenOne == null)
+        if (!chosenOne)
         {
             attemptsToMove++;
             return;

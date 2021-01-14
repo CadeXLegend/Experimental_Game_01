@@ -3,7 +3,7 @@
 ![engine](https://img.shields.io/badge/Engine-Unity%202019.3-orange)
 ![language](https://img.shields.io/badge/Language-C%23-blueviolet)
 
-![Image of Game as of 15-Jan-2021](https://imgur.com/h9glcD9)
+![Image of Game as of 15-Jan-2021](https://i.imgur.com/h9glcD9.jpg)
 
 Creating a game to experiment with code techniques, improve on knowledge, workflow, and to have fun while doing so!
 

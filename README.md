@@ -3,11 +3,14 @@
 ![engine](https://img.shields.io/badge/Engine-Unity%202019.3-orange)
 ![language](https://img.shields.io/badge/Language-C%23-blueviolet)
 
-Creating a game to experiment with new code techniques, and all that.
+![Image of Game as of 15-Jan-2021](https://imgur.com/h9glcD9)
 
-This is a C# Project.
+Creating a game to experiment with code techniques, improve on knowledge, workflow, and to have fun while doing so!
 
 ## Inspiration
+The inspiration for this game comes from a life time really.  I've been playing games since I was 3 years old.  I started with games like Warcraft 1/2, floppy disk games, MAME32 games, games like Pyjama Sam, Escape From Monkey Island, and so on.  I absolutely adored these games and it birthed in me a flame, a passion, and a desire for games.  I eventually fell in love with titles such as SW:KOTOR, Warcraft 3, FF12, and even though I have maintained an extremely diverse interest in all genres, I have always been inexplicably drawn to methodical, thought-oriented turn-based strategy games.  I still recall more recent fond memories of games such as Total War: SHOGUN 2, Civ 5, Endless Legend, and older ones of the RTS days like The Lord of the Rings: The Battle for Middle-earth II, Command & Conquer Generals/Tiberium Wars, and so on.  The most recent turn-based games I thoroughly enjoyed were Battle Chasers: Nightwar, Cardinal Quest 1 & 2, and Divinity: Original Sin 2.
+
+This game is heavily inspired by the games below, as well as inspired in other ways by the games above and more unmentioned due to not wanting to write multiple paragraphs.
 
 ### Cardinal Quest 1
 http://cardinalquest.com/
@@ -22,12 +25,16 @@ https://store.steampowered.com/app/435150/Divinity_Original_Sin_2__Definitive_Ed
 
 ## Prerequisites
 
-To use this project on your local machine, make sure you have Unity 2019.3.0b12 installed.
+To use this project on your local machine, make sure you have Unity 2020.2.1f1 installed.
 
 ```
 You can get Unity from here: https://unity3d.com/get-unity/download
 
 I recommend using Unity Hub to manage the versions and projects.
+
+This project has got Unit Testing enabled.  Feel free to disable it.
+
+If there are any specific dependencies or particular assembly configurations required which are present in this project, they should all be included in this repo and work "out of the box".  If this is not the case, please notify me here on Github or by email. 
 ```
 
 ## Built With
@@ -37,13 +44,15 @@ I recommend using Unity Hub to manage the versions and projects.
 
 ## License
 
-This project isn't licensed.  Woo.
+[Creative Commons CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) Creative Commons CC BY 4.0
 
 ## Acknowledgments
 
 * StackOverflow
-* Unity Scripting API
-* Just do it attitude
+* Unity & it's Scripting API
+* The Visual Studio Team
+* All the incredibly creative developers out there
+* YouTubers, Forum posters, and the incredible community present in the sphere of Programming & Game Development
 * My friends
 * My mum
 

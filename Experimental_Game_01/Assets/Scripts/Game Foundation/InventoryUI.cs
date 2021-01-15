@@ -9,7 +9,7 @@ public class InventoryUI : MonoBehaviour
 
     private void Start()
     {
-        Interaction.OnHarvestCompleted += () => { UpdateUI(); };
+        Interaction.OnGatherCompleted += () => { UpdateUI(); };
     }
 
     private void UpdateUI()

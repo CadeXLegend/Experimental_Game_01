@@ -68,6 +68,8 @@ namespace Generation
             isOccupied = transform.childCount == 0 ? false : true;
             if (!IsOccupied)
             {
+                if(Highlighted && Parent)
+                    Parent.spriteRenderer.color = new Color32(255, 255, 255, 100);
                 isOccupiedByPlayer = false;
                 return;
             }
@@ -147,9 +149,25 @@ namespace Generation
             lastSelectedTiles.Clear();
         }
 
-        private void OnMouseDown()
+        private bool isDragging = false;
+        private float dragTimer = 0.4f;
+        private void OnMouseDrag()
         {
-            switch(tag)
+            dragTimer -= Time.deltaTime;
+            if (dragTimer >= 0) return;
+
+            isDragging = true;
+            ActionWheel.instance.SetActionWheelPosition(Camera.main.WorldToScreenPoint(transform.position));
+            if (ActionWheel.instance.IsActive) return;
+
+            ActionWheel.instance.EnableActionWheel();
+            dragTimer = 0.4f;
+        }
+
+        private void OnMouseUp()
+        {
+            isDragging = false;
+            switch (tag)
             {
                 case "Resource":
                     if (!Parent.highlighted) return;
@@ -159,16 +177,17 @@ namespace Generation
                         if (neighbour.NeighbourTile.IsOccupiedByPlayer)
                             agent = neighbour.NeighbourTile.transform.GetChild(0).GetComponent<Agent.Agent>();
                     int loot = UnityEngine.Random.Range(1, 2);
-                    Interaction.Harvest(loot);
-                    agent.ProcessAction();
-                    Parent.spriteRenderer.color = new Color32(255, 255, 255, 100);
-                    Destroy(gameObject);
+                    ActionWheel.instance.SetGatherNodeAndAmount("lumber", loot);
+                    ActionWheel.instance.SetGatherNodeRef(gameObject, agent);
                     break;
                 default:
                     if (!highlighted) return;
                     selected = true;
                     break;
             }
+            if (!ActionWheel.instance.IsActive) return;
+
+            ActionWheel.instance.DisableActionWheel();
         }
     }
 }

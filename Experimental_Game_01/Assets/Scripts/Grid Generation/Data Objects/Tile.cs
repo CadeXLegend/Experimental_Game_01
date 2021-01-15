@@ -12,6 +12,7 @@ namespace Generation
         [Flags]
         public enum PositionOnGrid
         {
+            Default =               0,                   // 0
             TopLeftCorner =         1 << 0,              // 1
             TopEdgeColumn =         1 << 1,              // 2
             TopRightCorner =        1 << 2,              // 4

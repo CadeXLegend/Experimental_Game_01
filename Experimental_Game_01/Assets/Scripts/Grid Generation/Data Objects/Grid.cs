@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Generation
@@ -111,17 +112,24 @@ namespace Generation
                 return Tile.PositionOnGrid.Center;
         }
 
+        private Dictionary<Tile, Color> selectedTilesColours = new Dictionary<Tile, Color>();
         /// <summary>
         /// Highlight all Tiles found on the given Position of the Grid.
         /// </summary>
         /// <param name="PositionToHighlight">The Position of the Grid which you want to have Highlighted.</param>
         public virtual void HighlightSectionOfGrid(Tile.PositionOnGrid PositionToHighlight)
         {
-            foreach (Tile t in TileGrid)
+            Tile[] flattened = TileGrid.Cast<Tile>().ToArray();
+            int len = flattened.Length;
+            foreach (var selectedTile in selectedTilesColours)
+                selectedTile.Key.spriteRenderer.color = selectedTile.Value;
+            selectedTilesColours.Clear();
+            for (int i = 0; i < len; ++i)
             {
-                t.spriteRenderer.color = Color.white;
+                Tile t = flattened[i];
                 if (t.TilePositionOnGrid == PositionToHighlight)
                 {
+                    selectedTilesColours.Add(t, t.spriteRenderer.color);
                     t.spriteRenderer.color = Color.gray;
                 }
             }
@@ -154,15 +162,27 @@ namespace Generation
         /// <param name="theme">The Tile Theme you wish to activate.</param>
         public virtual IEnumerator HotSwapTileThemeEnumerable(GridAssetTheme.Theme theme)
         {
+            //keeping these var declarations out of the loop since 
+            //there's no need for them to be re-created every loop
+            //that's excessive allocation when they'll get cleaned
+            //post-this function finishing execution
+            GridAssetTheme gat;
+            int posOnGridRaw;
+            Sprite tileSprite;
+            SpriteRenderer r;
+
             foreach (Tile t in TileGrid)
             {
-                t.spriteRenderer.sprite = Container.AssignedGridAssets.Themes[(int)theme].Sprites[t.TilePositionOnGrid.GetUnshiftedNumber()];
+                gat = Container.AssignedGridAssets.Themes[(int)theme];
+                posOnGridRaw = t.TilePositionOnGrid.GetUnshiftedNumber() - 1;
+                tileSprite = gat.Sprites[posOnGridRaw];
+                t.spriteRenderer.sprite = tileSprite;
                 if (t.transform.childCount > 0)
                     for (int i = 0; i < t.transform.childCount; ++i)
                     {
                         if (t.transform.GetChild(i).name.Contains("Decoration"))
                         {
-                            SpriteRenderer r = t.transform.GetChild(i).GetComponent<SpriteRenderer>();
+                            r = t.transform.GetChild(i).GetComponent<SpriteRenderer>();
                             r.sprite = Container.AssignedGridAssets.Themes[(int)theme].TileDecorations[0].Sprite;
                         }
                     }

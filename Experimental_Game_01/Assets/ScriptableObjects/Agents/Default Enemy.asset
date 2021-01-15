@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Default Enemy
   m_EditorClassIdentifier: 
   AgentName: Skeleton
+  specialType: 0
   Graphic: {fileID: 21301090, guid: 9afe77e76eb29394bb29beb2eb3cab36, type: 3}
   UsesRigidbody2D: 1
   AgentSize: {x: 1, y: 1}
@@ -21,4 +22,6 @@ MonoBehaviour:
   Health: 2
   Attack: 1
   AttackRange: 1
+  DetectionRange: 4
   ActionsPerTurn: 1
+  InputTypesForAgent: 0

@@ -27,7 +27,7 @@ namespace Agent
         private GenerateResources resourcesGenerator;
 
         private int health;
-        private int Health
+        public int Health
         {
             get
             {
@@ -44,7 +44,11 @@ namespace Agent
         }
         private int maxHealth;
         private int attack;
+        public float Attack { get => attack; }
         private int attackRange;
+        public float AttackRange { get => attackRange; }
+        private float detectionRange;
+        public float DetectionRange { get => detectionRange; }
         //defaults to 1 action per turn
         private int actionsPerTurn = 1;
         public int ActionsPerTurn { get => actionsPerTurn; }
@@ -90,8 +94,10 @@ namespace Agent
             health = maxHealth;
             attack = agentData.Attack;
             attackRange = agentData.AttackRange;
+            detectionRange = agentData.DetectionRange;
             actionsPerTurn = agentData.ActionsPerTurn;
             specialType = agentData.specialType;
+            detectionRange = agentData.DetectionRange;
         }
 
         /// <summary>
@@ -117,6 +123,7 @@ namespace Agent
             attackRange = agentData.AttackRange;
             actionsPerTurn = agentData.ActionsPerTurn;
             specialType = agentData.specialType;
+            detectionRange = agentData.DetectionRange;
         }
 
         public virtual void ProcessAction()

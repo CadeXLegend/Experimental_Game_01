@@ -52,12 +52,12 @@ public class SpawnAgentOverTime : MonoBehaviour
                 spawnOntoRandomTileNeighbour: true              //whether we want this object to spawn automagically onto a randomly selected neighbour tile
                 );
 
-            if(go.tag != "Enemy")
+            if(!go.CompareTag("Enemy"))
                 go.tag = "Enemy";
             Agent.Agent spawnedAgent = go.GetComponent<Agent.Agent>();
             AISuperSimpleMove aiMover = go.AddComponent<AISuperSimpleMove>();
-            aiMover.Init(spawnedAgent, agentConfig, go.transform.parent.GetComponent<Tile>());
             spawnedAgent.Init(agentConfig, aiMover);
+            aiMover.Init(spawnedAgent, agentConfig, go.transform.parent.GetComponent<Tile>());
             TurnManagement.AgentTurnSetter.AddAgentToStateMachine(spawnedAgent);
             amountOfAgentsSpawned++;
             go.name += $" ({amountOfAgentsSpawned})";

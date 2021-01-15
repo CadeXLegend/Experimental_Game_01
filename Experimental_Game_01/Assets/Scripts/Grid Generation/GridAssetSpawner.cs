@@ -119,7 +119,7 @@ namespace Generation
                 goT.CoordinatesOnGrid = t.CoordinatesOnGrid;
                 goT.spriteRenderer = goT.GetComponent<SpriteRenderer>();
                 //transpose ends here ^
-                int tilePosOnGrid = t.TilePositionOnGrid.GetUnshiftedNumber();
+                int tilePosOnGrid = t.TilePositionOnGrid.GetUnshiftedNumber() - 1;
                 #region Error Handling
                 GridAssetTheme[] themes = gridAssets.Themes;
                 if (themes[(int)theme] == null)

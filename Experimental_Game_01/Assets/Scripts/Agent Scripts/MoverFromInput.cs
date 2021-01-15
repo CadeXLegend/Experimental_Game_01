@@ -25,14 +25,13 @@ namespace Agent
 
         //defaults to reading keyboard input
         private TypeOfInput inputType = TypeOfInput.Keyboard;
-
         private Agent parent;
-
         private Rigidbody2D rb;
         //[SerializeField, ReadOnly]
         private Tile previousTile;
         //[SerializeField, ReadOnly]
         private Tile currentTile;
+        public Tile CurrentTile { get => currentTile; }
         //[SerializeField, ReadOnly]
         private Tile tileToMoveTo;
         private bool hasGotTileToMoveTo = false;
@@ -128,7 +127,7 @@ namespace Agent
             if (inputType.HasFlag(TypeOfInput.ClickOnGrid))
                 directionToMoveTo = ClickOnGridInputToVector2();
 
-            if(Input.GetKeyDown(KeyCode.Keypad0))
+            if(Input.GetKeyDown(KeyCode.Space))
                 parent.ProcessAction();
         }
 

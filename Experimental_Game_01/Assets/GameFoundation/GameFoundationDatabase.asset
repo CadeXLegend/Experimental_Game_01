@@ -1,0 +1,185 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-5564194203982565212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0045a420c8b2b474eb4c14cf512c1cb5, type: 3}
+  m_Name: lumber_InventoryItem_Detail_Stat
+  m_EditorClassIdentifier: 
+  m_Owner: {fileID: 6818290957062935602}
+  m_StatDefaultIntValues_Keys: 3458771d
+  m_StatDefaultIntValues_Values: 05000000
+  m_StatDefaultFloatValues_Keys: 
+  m_StatDefaultFloatValues_Values: []
+--- !u!114 &-5418445247820907009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b88f5bccd054f984d9be6ad05294da40, type: 3}
+  m_Name: _Catalog_Stats
+  m_EditorClassIdentifier: 
+  m_StatDefinitions:
+  - m_Id: value
+    m_IdHash: 494360628
+    m_DisplayName: Value
+    m_StatValueType: 0
+--- !u!114 &-5100259729787944570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99a121bc2d8644fcb8f5f5ed98363908, type: 3}
+  m_Name: wallet_Inventory
+  m_EditorClassIdentifier: 
+  m_DisplayName: Wallet
+  m_Id: wallet
+  m_Hash: 2087227935
+  m_ReferenceDefinition: {fileID: 0}
+  m_Categories: 
+  m_DetailDefinitionValues: []
+  m_DefaultItems: []
+--- !u!114 &-4356849543464961033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99a121bc2d8644fcb8f5f5ed98363908, type: 3}
+  m_Name: main_Inventory
+  m_EditorClassIdentifier: 
+  m_DisplayName: Main
+  m_Id: main
+  m_Hash: -1087845020
+  m_ReferenceDefinition: {fileID: 0}
+  m_Categories: 
+  m_DetailDefinitionValues: []
+  m_DefaultItems: []
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6d6d794703b5406883240f543e5b084, type: 3}
+  m_Name: GameFoundationDatabase
+  m_EditorClassIdentifier: 
+  m_GameItemCatalog: {fileID: 5851484767530482299}
+  m_InventoryCatalog: {fileID: 7781028756720521492}
+  m_StatCatalog: {fileID: -5418445247820907009}
+--- !u!114 &1444162015400990928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85f435411c3254f0194e27eaab7e7c6e, type: 3}
+  m_Name: lumber_InventoryItem_Detail_Icon
+  m_EditorClassIdentifier: 
+  m_Owner: {fileID: 6818290957062935602}
+  m_Icon: {fileID: 21303076, guid: 9afe77e76eb29394bb29beb2eb3cab36, type: 3}
+--- !u!114 &3295165691429425993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bad1838c60d074d51ad3002c9f025f98, type: 3}
+  m_Name: lumber_InventoryItem_Detail_Currency
+  m_EditorClassIdentifier: 
+  m_Owner: {fileID: 6818290957062935602}
+  m_CurrencyType: 0
+--- !u!114 &5851484767530482299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b7bd278f724ab94d891fb484af87b44, type: 3}
+  m_Name: _Catalog_GameItems
+  m_EditorClassIdentifier: 
+  m_Categories: []
+  m_Definitions: []
+--- !u!114 &6818290957062935602
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcbd052539327467295d2009d33aa660, type: 3}
+  m_Name: lumber_InventoryItem
+  m_EditorClassIdentifier: 
+  m_DisplayName: Lumber
+  m_Id: lumber
+  m_Hash: -614941089
+  m_ReferenceDefinition: {fileID: 0}
+  m_Categories: 
+  m_DetailDefinitionValues:
+  - {fileID: -5564194203982565212}
+  - {fileID: 1444162015400990928}
+  - {fileID: 6963451965882903432}
+  - {fileID: 3295165691429425993}
+--- !u!114 &6963451965882903432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15cb36b4e39d04058878d632b15e1f5b, type: 3}
+  m_Name: lumber_InventoryItem_Detail_Analytics
+  m_EditorClassIdentifier: 
+  m_Owner: {fileID: 6818290957062935602}
+--- !u!114 &7781028756720521492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48b084f2c338a4185ab8badeed2a3947, type: 3}
+  m_Name: _Catalog_Inventories
+  m_EditorClassIdentifier: 
+  m_Categories: []
+  m_CollectionDefinitions:
+  - {fileID: -4356849543464961033}
+  - {fileID: -5100259729787944570}
+  m_ItemDefinitions:
+  - {fileID: 6818290957062935602}
+  m_DefaultCollectionDefinitions: []

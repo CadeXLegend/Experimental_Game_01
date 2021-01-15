@@ -235,12 +235,16 @@ namespace Generation
             go.name = $"{assetName} (Custom)";
 #endif
             go.tag = "Resource";
-            BoxCollider2D collider = go.AddComponent<BoxCollider2D>();
-            collider.size = gridAssets.Themes[(int)theme].TileDecorations[0].ColliderSize;
+            Tile decoT = go.GetComponent<Tile>();
+            decoT.Parent = t;
+            t.Child = decoT;
+            //BoxCollider2D collider = go.AddComponent<BoxCollider2D>();
+            //collider.size = gridAssets.Themes[(int)theme].TileDecorations[0].ColliderSize;
             SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
             sr.sprite = gridAssets.Themes[(int)theme].TileDecorations[0].Sprite;
             go.transform.localScale *= gridAssets.Themes[(int)theme].TileDecorations[0].SpriteScale;
             sr.sortingOrder = 1;
+            sr.gameObject.layer = 7;
             AssetsSpawned?.Invoke();
             return go;
         }
@@ -270,12 +274,16 @@ namespace Generation
                 go.name = $"{assetName} (X: {column}  Y:{row})";
 #endif
                 go.tag = "Resource";
-                BoxCollider2D collider = go.AddComponent<BoxCollider2D>();
-                collider.size = gridAssets.Themes[(int)theme].TileDecorations[0].ColliderSize;
+                Tile decoT = go.GetComponent<Tile>();
+                decoT.Parent = t;
+                t.Child = decoT;
+                //BoxCollider2D collider = go.AddComponent<BoxCollider2D>();
+                //collider.size = gridAssets.Themes[(int)theme].TileDecorations[0].ColliderSize;
                 SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
                 sr.sprite = gridAssets.Themes[(int)theme].TileDecorations[0].Sprite;
                 go.transform.localScale *= gridAssets.Themes[(int)theme].TileDecorations[0].SpriteScale;
                 sr.sortingOrder = 1;
+                sr.gameObject.layer = 7;
                 SpawningAssets?.Invoke();
                 goArray.Add(go);
             });

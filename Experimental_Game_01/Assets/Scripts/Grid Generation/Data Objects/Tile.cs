@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -28,6 +29,7 @@ namespace Generation
         [SerializeField]
         private List<TileNeighbour> neighbours;
         public List<TileNeighbour> Neighbours { get => neighbours; }
+        public Tile Child, Parent;
         [Header("Tile Information")]
         [SerializeField] [ReadOnly] private PositionOnGrid tilePositionOnGrid;
         public PositionOnGrid TilePositionOnGrid { get => tilePositionOnGrid; set => tilePositionOnGrid = value; }
@@ -58,8 +60,18 @@ namespace Generation
 
         private void Update()
         {
+            OccupancyChecker();
+        }
+
+        public void OccupancyChecker()
+        {
             isOccupied = transform.childCount == 0 ? false : true;
-            isOccupiedByPlayer = isOccupied ? transform.GetChild(0).CompareTag("Player") ? true : true : false;
+            if (!IsOccupied)
+            {
+                isOccupiedByPlayer = false;
+                return;
+            }
+            isOccupiedByPlayer = transform.GetChild(0).CompareTag("Player");
         }
 
         public void AssignNeighbours(List<TileNeighbour> _neighbours)
@@ -102,24 +114,18 @@ namespace Generation
                 }
                 else
                 {
+                    if (!lastSelectedTiles.ContainsKey(t))
+                        lastSelectedTiles.Add(t, t.spriteRenderer.color);
+                    t.highlighted = true;
                     switch (t.transform.GetChild(0).tag)
                     {
                         case "Enemy":
-                            if (!lastSelectedTiles.ContainsKey(t))
-                                lastSelectedTiles.Add(t, t.spriteRenderer.color);
-                            t.highlighted = true;
                             t.spriteRenderer.color = new Color32(255, 0, 0, 200);
                             break;
                         case "Resource":
-                            if (!lastSelectedTiles.ContainsKey(t))
-                                lastSelectedTiles.Add(t, t.spriteRenderer.color);
-                            t.highlighted = true;
                             t.spriteRenderer.color = new Color32(0, 255, 0, 200);
                             break;
                         case "Player":
-                            if (!lastSelectedTiles.ContainsKey(t))
-                                lastSelectedTiles.Add(t, t.spriteRenderer.color);
-                            t.highlighted = true;
                             t.spriteRenderer.color = new Color32(0, 0, 255, 100);
                             break;
                     }
@@ -143,8 +149,25 @@ namespace Generation
 
         private void OnMouseDown()
         {
-            if (highlighted)
-                selected = true;
+            switch(tag)
+            {
+                case "Resource":
+                    if (!Parent.highlighted) return;
+                    selected = true;
+                    Agent.Agent agent = null;
+                    foreach (var neighbour in Parent.Neighbours)
+                        if (neighbour.NeighbourTile.IsOccupiedByPlayer)
+                            agent = neighbour.NeighbourTile.transform.GetChild(0).GetComponent<Agent.Agent>();
+                    int loot = UnityEngine.Random.Range(1, 2);
+                    Interaction.Harvest(loot);
+                    agent.ProcessAction();
+                    Destroy(gameObject);
+                    break;
+                default:
+                    if (!highlighted) return;
+                    selected = true;
+                    break;
+            }
         }
     }
 }

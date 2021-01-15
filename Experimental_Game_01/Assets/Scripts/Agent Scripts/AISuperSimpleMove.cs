@@ -51,7 +51,9 @@ public class AISuperSimpleMove : MonoBehaviour, IMover
             playerPositions.Clear();
         }
         else
-            parent.ProcessAction();
+        {
+            targetPlayer = currentTile.Neighbours.First(t => !t.NeighbourTile.IsOccupied && !t.NeighbourTile.IsOccupiedByPlayer).NeighbourTile.gameObject;
+        }
 
         if (!parent.CanDoActions)
             return;
@@ -110,11 +112,14 @@ public class AISuperSimpleMove : MonoBehaviour, IMover
         for (int i = 0; i < unoccTilesLen; ++i)
         {
             t = UnoccupiedTiles[i].NeighbourTile;
+            //if(t.spriteRenderer.color != Color.green)
+            //    t.spriteRenderer.color = Color.red;
             if (Vector2.Distance(t.transform.position, targetPlayer.transform.position)
               < Vector2.Distance(lowestDistanceScore, targetPlayer.transform.position))
             {
                 lowestDistanceScore = t.transform.position;
                 chosenOne = t;
+            //    t.spriteRenderer.color = Color.green;
             }
         }
 

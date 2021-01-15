@@ -161,6 +161,7 @@ namespace Generation
                     int loot = UnityEngine.Random.Range(1, 2);
                     Interaction.Harvest(loot);
                     agent.ProcessAction();
+                    Parent.spriteRenderer.color = new Color32(255, 255, 255, 100);
                     Destroy(gameObject);
                     break;
                 default:

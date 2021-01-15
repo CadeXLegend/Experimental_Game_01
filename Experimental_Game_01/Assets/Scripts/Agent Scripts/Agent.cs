@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using MyBox;
+using System;
+
 namespace Agent
 {
     [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(SpriteRenderer))]
     public class Agent : MonoBehaviour
     {
+        public Action OnHealthChanged;
         public enum AgentSpecialType
         {
             None,
@@ -40,9 +43,11 @@ namespace Agent
                 //restrict the possible values for health to be
                 //within the min and max health range
                 health = Mathf.Clamp(value, 0, maxHealth);
+                OnHealthChanged?.Invoke();
             }
         }
         private int maxHealth;
+        public int MaxHealth { get => maxHealth; }
         private int attack;
         public float Attack { get => attack; }
         private int attackRange;

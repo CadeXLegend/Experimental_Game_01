@@ -2,6 +2,7 @@
 ![platform](https://img.shields.io/badge/Platform-Win--64-blue)
 ![engine](https://img.shields.io/badge/Engine-Unity%202020.2.1f1-orange)
 ![language](https://img.shields.io/badge/Language-C%23-blueviolet)
+![Discord Server](https://img.shields.io/discord/133525034298900480?label=Personal%20Server&logo=Discord)
 
 ![Image of Game as of 15-Jan-2021](https://i.imgur.com/h9glcD9.jpg)
 

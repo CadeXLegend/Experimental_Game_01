@@ -3,7 +3,7 @@
 ![engine](https://img.shields.io/badge/Engine-Unity%202020.2.1f1-orange)
 ![language](https://img.shields.io/badge/Language-C%23-blueviolet)
 ![Discord Server](https://img.shields.io/discord/133525034298900480?label=Personal%20Server&logo=Discord)
-![Last Commit](https://img.shields.io/github/last-commit/CadeXLegend/Experimental_Game_01)
+![Last Commit](https://img.shields.io/github/last-commit/CadeXLegend/Experimental_Game_01?label=Last%20Commit)
 
 ![Image of Game as of 15-Jan-2021](https://i.imgur.com/h9glcD9.jpg)
 

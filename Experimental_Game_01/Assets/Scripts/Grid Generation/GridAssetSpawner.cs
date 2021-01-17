@@ -245,6 +245,7 @@ namespace Generation
             go.transform.localScale *= gridAssets.Themes[(int)theme].TileDecorations[0].SpriteScale;
             sr.sortingOrder = 1;
             sr.gameObject.layer = 7;
+            sr.color = new Color(95, 191, 0, 255);
             AssetsSpawned?.Invoke();
             return go;
         }

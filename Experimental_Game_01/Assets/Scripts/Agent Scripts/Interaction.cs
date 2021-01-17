@@ -22,14 +22,17 @@ public static class Interaction
         Inventory.main.AddItem(resourceType, gatherAmount);
         OnGatherCompleted?.Invoke();
     }
+
     public static void Investigate()
     {
         OnInvestigateCompleted?.Invoke();
     }
+
     public static void Talk()
     {
         OnTalkCompleted?.Invoke();
     }
+
     public static void Attack()
     {
         OnAttackCompleted?.Invoke();

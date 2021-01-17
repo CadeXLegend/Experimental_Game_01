@@ -112,7 +112,7 @@ namespace MyBox.Internal
 			}
 			catch (Exception ex)
 			{
-				Debug.LogError("Unable to read MyBoxSettings, set to defaults" + ex);
+				//Debug.LogError("Unable to read MyBoxSettings, set to defaults" + ex);
 				settingsInstance = null;
 			}
 

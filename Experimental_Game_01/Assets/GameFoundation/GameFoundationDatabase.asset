@@ -1,5 +1,25 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8076615317637225037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dbf3f8defcf78f428d1448085483eff, type: 3}
+  m_Name: lumber_GameItem
+  m_EditorClassIdentifier: 
+  m_DisplayName: Lumber
+  m_Id: lumber
+  m_Hash: -614941089
+  m_ReferenceDefinition: {fileID: 0}
+  m_Categories: 
+  m_DetailDefinitionValues:
+  - {fileID: 7027859092618367578}
+  - {fileID: -37117178962060773}
 --- !u!114 &-5564194203982565212
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71,7 +91,26 @@ MonoBehaviour:
   m_ReferenceDefinition: {fileID: 0}
   m_Categories: 
   m_DetailDefinitionValues: []
-  m_DefaultItems: []
+  m_DefaultItems:
+  - m_DefinitionHash: -614941089
+    m_Quantity: 1
+--- !u!114 &-37117178962060773
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0045a420c8b2b474eb4c14cf512c1cb5, type: 3}
+  m_Name: lumber_GameItem_Detail_Stat
+  m_EditorClassIdentifier: 
+  m_Owner: {fileID: -8076615317637225037}
+  m_StatDefaultIntValues_Keys: 3458771d
+  m_StatDefaultIntValues_Values: 05000000
+  m_StatDefaultFloatValues_Keys: 
+  m_StatDefaultFloatValues_Values: []
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -100,21 +139,7 @@ MonoBehaviour:
   m_Name: lumber_InventoryItem_Detail_Icon
   m_EditorClassIdentifier: 
   m_Owner: {fileID: 6818290957062935602}
-  m_Icon: {fileID: 21303076, guid: 9afe77e76eb29394bb29beb2eb3cab36, type: 3}
---- !u!114 &3295165691429425993
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bad1838c60d074d51ad3002c9f025f98, type: 3}
-  m_Name: lumber_InventoryItem_Detail_Currency
-  m_EditorClassIdentifier: 
-  m_Owner: {fileID: 6818290957062935602}
-  m_CurrencyType: 0
+  m_Icon: {fileID: 21303074, guid: 9afe77e76eb29394bb29beb2eb3cab36, type: 3}
 --- !u!114 &5851484767530482299
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128,7 +153,8 @@ MonoBehaviour:
   m_Name: _Catalog_GameItems
   m_EditorClassIdentifier: 
   m_Categories: []
-  m_Definitions: []
+  m_Definitions:
+  - {fileID: -8076615317637225037}
 --- !u!114 &6818290957062935602
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -149,9 +175,7 @@ MonoBehaviour:
   m_DetailDefinitionValues:
   - {fileID: -5564194203982565212}
   - {fileID: 1444162015400990928}
-  - {fileID: 6963451965882903432}
-  - {fileID: 3295165691429425993}
---- !u!114 &6963451965882903432
+--- !u!114 &7027859092618367578
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -160,10 +184,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15cb36b4e39d04058878d632b15e1f5b, type: 3}
-  m_Name: lumber_InventoryItem_Detail_Analytics
+  m_Script: {fileID: 11500000, guid: 85f435411c3254f0194e27eaab7e7c6e, type: 3}
+  m_Name: lumber_GameItem_Detail_Icon
   m_EditorClassIdentifier: 
-  m_Owner: {fileID: 6818290957062935602}
+  m_Owner: {fileID: -8076615317637225037}
+  m_Icon: {fileID: 21303074, guid: 9afe77e76eb29394bb29beb2eb3cab36, type: 3}
 --- !u!114 &7781028756720521492
 MonoBehaviour:
   m_ObjectHideFlags: 0

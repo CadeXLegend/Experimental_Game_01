@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.GameFoundation;
+using UnityEngine.EventSystems;
 
 namespace Generation
 {
@@ -149,45 +151,89 @@ namespace Generation
             lastSelectedTiles.Clear();
         }
 
-        private bool isDragging = false;
-        private float dragTimer = 0.4f;
-        private void OnMouseDrag()
+        private void OnMouseOver()
         {
-            dragTimer -= Time.deltaTime;
-            if (dragTimer >= 0) return;
+            if (Highlighted || Parent && Parent.Highlighted)
+            {
+                ActionButtons.instance.SetActionButtonPosition(Camera.main.WorldToScreenPoint(transform.position));
+                ActionButtons.instance.SetCursorVisibility(true);
+            }
+            if (!Parent) return;
+            if (!Parent.Highlighted) return;
+            if (!ActionButtons.instance.IsActive) return;
+            SetActionButtonOn();
+        }
 
-            isDragging = true;
-            ActionWheel.instance.SetActionWheelPosition(Camera.main.WorldToScreenPoint(transform.position));
-            if (ActionWheel.instance.IsActive) return;
-
-            ActionWheel.instance.EnableActionWheel();
-            dragTimer = 0.4f;
+        private void OnMouseExit()
+        {
+            if (!ActionButtons.instance.IsActive) return;
+            SetActionButtonOff();
+            ActionButtons.instance.SetCursorVisibility(false);
         }
 
         private void OnMouseUp()
         {
-            isDragging = false;
             switch (tag)
             {
                 case "Resource":
-                    if (!Parent.highlighted) return;
+                    if (!Parent) return;
+                    if (!Parent.Highlighted) return;
                     selected = true;
                     Agent.Agent agent = null;
                     foreach (var neighbour in Parent.Neighbours)
                         if (neighbour.NeighbourTile.IsOccupiedByPlayer)
                             agent = neighbour.NeighbourTile.transform.GetChild(0).GetComponent<Agent.Agent>();
                     int loot = UnityEngine.Random.Range(1, 2);
-                    ActionWheel.instance.SetGatherNodeAndAmount("lumber", loot);
-                    ActionWheel.instance.SetGatherNodeRef(gameObject, agent);
+                    ActionButtons.instance.SetGatherNodeAndAmount("lumber", loot);
+                    ActionButtons.instance.SetGatherNodeRef(gameObject, agent);
+                    Parent.spriteRenderer.color = new Color32(255, 255, 255, 100);
+                    break;
+                case "Enemy":
+                    selected = true;
                     break;
                 default:
                     if (!highlighted) return;
                     selected = true;
+                    ActionButtons.instance.SetCursorVisibility(false);
                     break;
             }
-            if (!ActionWheel.instance.IsActive) return;
+        }
 
-            ActionWheel.instance.DisableActionWheel();
+        private void SetActionButtonOn()
+        {
+            switch (tag)
+            {
+                case "Resource":
+                    ActionButtons.instance.EnableActionButton(_actionType: ActionButtons.ActionType.Gather);
+                    break;
+                case "Enemy":
+                    ActionButtons.instance.EnableActionButton(_actionType: ActionButtons.ActionType.Attack);
+                    break;
+                case "Investigate":
+                    ActionButtons.instance.EnableActionButton(_actionType: ActionButtons.ActionType.Investigate);
+                    break;
+                case "Talk":
+                    ActionButtons.instance.EnableActionButton(_actionType: ActionButtons.ActionType.Talk);
+                    break;
+            }
+        }
+        private void SetActionButtonOff()
+        {
+            switch (tag)
+            {
+                case "Resource":
+                    ActionButtons.instance.DisableActionButton(_actionType: ActionButtons.ActionType.Gather);
+                    break;
+                case "Enemy":
+                    ActionButtons.instance.DisableActionButton(_actionType: ActionButtons.ActionType.Attack);
+                    break;
+                case "Investigate":
+                    ActionButtons.instance.DisableActionButton(_actionType: ActionButtons.ActionType.Investigate);
+                    break;
+                case "Talk":
+                    ActionButtons.instance.DisableActionButton(_actionType: ActionButtons.ActionType.Talk);
+                    break;
+            }
         }
     }
 }

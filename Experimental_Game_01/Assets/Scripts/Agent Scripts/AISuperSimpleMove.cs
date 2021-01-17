@@ -4,10 +4,11 @@ using UnityEngine;
 using Agent;
 using Generation;
 using System.Linq;
+using System;
 
 public class AISuperSimpleMove : MonoBehaviour, IMover
 {
-    private Agent.Agent parent;
+    private Agent.Agent agent;
     private AgentConfig config;
     [SerializeField]
     private Tile lastTileWasOn;
@@ -22,20 +23,21 @@ public class AISuperSimpleMove : MonoBehaviour, IMover
     private float movementSpeed;
     private Transform detectionSphere;
 
-    public void Init(Agent.Agent _parent, AgentConfig _config, Tile _currentTile)
+    public void Init(Agent.Agent _agent, AgentConfig _config, Tile _currentTile)
     {
         config = _config;
         currentTile = _currentTile;
-        parent = _parent;
+        agent = _agent;
         movementSpeed = config.MovementSpeed;
         detectionSphere = transform.GetChild(0).transform;
-        detectionSphere.localScale *= parent.DetectionRange + 2;
+        detectionSphere.localScale *= agent.DetectionRange + 2;
+        BindParentChildTile();
     }
 
     List<GameObject> playerPositions = new List<GameObject>();
     private void LateUpdate()
     {
-        Collider2D[] cols = Physics2D.OverlapCircleAll(currentTile.transform.position, parent.DetectionRange);
+        Collider2D[] cols = Physics2D.OverlapCircleAll(currentTile.transform.position, agent.DetectionRange);
 
         foreach(var col in cols)
         {
@@ -52,17 +54,24 @@ public class AISuperSimpleMove : MonoBehaviour, IMover
         }
         else
         {
-            targetPlayer = currentTile.Neighbours.First(t => !t.NeighbourTile.IsOccupied && !t.NeighbourTile.IsOccupiedByPlayer).NeighbourTile.gameObject;
+            try
+            {
+                targetPlayer = currentTile.Neighbours.First(t => !t.NeighbourTile.IsOccupied && !t.NeighbourTile.IsOccupiedByPlayer).NeighbourTile.gameObject;
+            }
+            catch(InvalidOperationException e)
+            {
+                agent.ProcessAction();
+            }
         }
 
-        if (!parent.CanDoActions)
+        if (!agent.CanDoActions)
             return;
 
         if (attemptsToMove > 9)
         {
             hasFoundTileToMoveTo = false;
             attemptsToMove = 0;
-            parent.ProcessAction();
+            agent.ProcessAction();
         }
 
         if (tileToMoveTo)
@@ -79,6 +88,7 @@ public class AISuperSimpleMove : MonoBehaviour, IMover
             FindTileToMoveToUsingCurrentTile();
     }
 
+    Tile goT, goTParent;
     public virtual void Move(Vector2 direction)
     {
         if (!tileToMoveTo)
@@ -89,11 +99,20 @@ public class AISuperSimpleMove : MonoBehaviour, IMover
             currentTile = tileToMoveTo;
             transform.parent = tileToMoveTo.transform;
             hasFoundTileToMoveTo = false;
-            parent.ProcessAction();
+            BindParentChildTile();
+            agent.ProcessAction();
             return;
         }
 
         transform.position = Vector2.LerpUnclamped(transform.position, direction, movementSpeed * Time.deltaTime);
+    }
+
+    private void BindParentChildTile()
+    {
+        Tile goT = GetComponent<Tile>();
+        Tile goTParent = transform.parent.GetComponent<Tile>();
+        goT.Parent = goTParent;
+        goTParent.Child = goT;
     }
 
     private void FindTileToMoveToUsingCurrentTile()

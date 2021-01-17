@@ -14,6 +14,6 @@ public class InventoryUI : MonoBehaviour
 
     private void UpdateUI()
     {
-        lumberText.text = $"{Inventory.main.GetItem("lumber").quantity}";
+        lumberText.text = $"{Inventory.main.GetQuantity(inventoryItemDefinitionId: "lumber")}";
     }
 }

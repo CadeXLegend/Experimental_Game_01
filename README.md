@@ -6,7 +6,7 @@
 ![Last Commit](https://img.shields.io/github/last-commit/CadeXLegend/Experimental_Game_01?label=Last%20Commit)
 
 ![Image of Game as of 15-Jan-2021](https://i.imgur.com/h9glcD9.jpg)
-![Update Progress GIF](https://i.imgur.com/YquKU7I.gifv)
+![](https://i.imgur.com/YquKU7I.gif)
 
 Creating a game to experiment with code techniques, improve on knowledge, workflow, and to have fun while doing so!
 

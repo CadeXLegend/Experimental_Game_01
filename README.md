@@ -7,6 +7,7 @@
 
 ![Image of Game as of 15-Jan-2021](https://i.imgur.com/h9glcD9.jpg)
 ![](https://i.imgur.com/YquKU7I.gif)
+<iframe width="1903" height="800" src="https://www.youtube.com/embed/AOyROyHkBFU" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 Creating a game to experiment with code techniques, improve on knowledge, workflow, and to have fun while doing so!
 
@@ -14,6 +15,8 @@ Creating a game to experiment with code techniques, improve on knowledge, workfl
 The inspiration for this game comes from a life time really.  I've been playing games since I was 3 years old.  I started with games like Warcraft 1/2, floppy disk games, MAME32 games, games like Pyjama Sam, Escape From Monkey Island, and so on.  I absolutely adored these games and it birthed in me a flame, a passion, and a desire for games.  I eventually fell in love with titles such as SW:KOTOR, Warcraft 3, FF12, and even though I have maintained an extremely diverse interest in all genres, I have always been inexplicably drawn to methodical, thought-oriented turn-based strategy games.  I still recall more recent fond memories of games such as Total War: SHOGUN 2, Civ 5, Endless Legend, and older ones of the RTS days like The Lord of the Rings: The Battle for Middle-earth II, Command & Conquer Generals/Tiberium Wars, and so on.  The most recent turn-based games I thoroughly enjoyed were Battle Chasers: Nightwar, Cardinal Quest 1 & 2, and Divinity: Original Sin 2.
 
 This game is heavily inspired by the games below, as well as inspired in other ways by the games above and more unmentioned due to not wanting to write multiple paragraphs.
+
+I recently found [Into The Breach](https://store.steampowered.com/app/590380/Into_the_Breach/) which seems like a fantastic game and somewhat similar in concept so I will try it out!
 
 ### Cardinal Quest 1
 http://cardinalquest.com/

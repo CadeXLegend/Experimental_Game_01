@@ -522,11 +522,13 @@ MonoBehaviour:
   Child: {fileID: 0}
   Parent: {fileID: 0}
   tilePositionOnGrid: 0
+  tileType: 3
   coordinateesOnGrid: {x: 0, y: 0}
   highlighted: 0
   selected: 0
   isOccupied: 0
   isOccupiedByPlayer: 0
+  IsNonTerrainTile: 1
 --- !u!1 &7814057315056296335
 GameObject:
   m_ObjectHideFlags: 0

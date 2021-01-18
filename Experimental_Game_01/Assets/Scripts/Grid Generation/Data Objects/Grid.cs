@@ -253,7 +253,7 @@ namespace Generation
             List<Tile> UnoccupiedTiles = new List<Tile>();
             foreach (Tile t in TileGrid)
             {
-                if (!t.IsOccupied)
+                if (!t.Child)
                     UnoccupiedTiles.Add(t);
             }
 

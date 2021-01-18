@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using MyBox;
 using System;
+using TurnManagement;
 
 namespace Agents
 {
@@ -74,11 +75,8 @@ namespace Agents
                     resourcesGenerator = GameObject.Find("Druid - Generate Resources").GetComponent<GenerateResources>();
                     break;
             }
-        }
 
-        private void LateUpdate()
-        {
-            DruidSpecialAbility();
+            AgentTurnSetter.OnAgentTurnEnded += () => { DruidSpecialAbility(); };
         }
 
         /// <summary>

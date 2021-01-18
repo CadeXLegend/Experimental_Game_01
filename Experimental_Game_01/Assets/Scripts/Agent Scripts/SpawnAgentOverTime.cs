@@ -54,6 +54,8 @@ public class SpawnAgentOverTime : MonoBehaviour
 
             if(!go.CompareTag("Enemy"))
                 go.tag = "Enemy";
+            Tile goT = go.GetComponent<Tile>();
+            goT.Type = Tile.TileType.Enemy;
             Agents.Agent spawnedAgent = go.GetComponent<Agents.Agent>();
             AISuperSimpleMove aiMover = go.AddComponent<AISuperSimpleMove>();
             spawnedAgent.Init(agentConfig, aiMover);

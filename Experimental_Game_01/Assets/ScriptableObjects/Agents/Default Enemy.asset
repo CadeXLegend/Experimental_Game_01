@@ -22,6 +22,6 @@ MonoBehaviour:
   Health: 20
   Attack: 1
   AttackRange: 1
-  DetectionRange: 3
-  ActionsPerTurn: 1
+  DetectionRange: 6
+  ActionsPerTurn: 2
   InputTypesForAgent: 0

@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using UnityEngine;
+using TurnManagement;
 
 namespace Agents
 {
@@ -25,7 +26,7 @@ namespace Agents
 
         //defaults to reading keyboard input
         private TypeOfInput inputType = TypeOfInput.Keyboard;
-        private Agent parent;
+        private Agent agent;
         private Rigidbody2D rb;
         //[SerializeField, ReadOnly]
         private Tile previousTile;
@@ -43,36 +44,32 @@ namespace Agents
         private AgentConfig agentConfiguration;
         [SerializeField]
         private float movementSpeed;
-
         private Vector2 directionToMoveTo = Vector2.zero;
 
         public void Init(Agent _parent, AgentConfig config)
         {
-            parent = _parent;
+            agent = _parent;
             agentConfiguration = config;
             rb = GetComponent<Rigidbody2D>();
-
             movementSpeed = agentConfiguration.MovementSpeed;
         }
 
         public void Init(Agent _parent, AgentConfig config, TypeOfInput _inputType)
         {
-            parent = _parent;
+            agent = _parent;
             agentConfiguration = config;
             rb = GetComponent<Rigidbody2D>();
             inputType = _inputType;
-
             movementSpeed = agentConfiguration.MovementSpeed;
         }
 
         public void Init(Agent _parent, AgentConfig config, TypeOfInput _inputType, Tile _currentTile)
         {
-            parent = _parent;
+            agent = _parent;
             agentConfiguration = config;
             rb = GetComponent<Rigidbody2D>();
             inputType = _inputType;
             currentTile = _currentTile;
-
             movementSpeed = agentConfiguration.MovementSpeed;
         }
 
@@ -82,38 +79,27 @@ namespace Agents
         }
 
         // Update is called once per frame
-        private void Update()
+        private void LateUpdate()
         {
-            if (!parent.CanDoActions)
-            {
-                currentTile.StopVisualizingNeighbours();
-                return;
-            }
-
-            if (!hasGotTileToMoveTo)
-                ValueFromInput();
-
+            if (!AgentTurnSetter.IsCurrentAgent(agent)) return;
+            if (!agent.CanDoActions) return;
+            currentTile.VisualizeNeighbours();
+            ValueFromInput();
+            if (!hasGotTileToMoveTo) return;
+            currentTile.StopVisualizingNeighbours();
             Move(directionToMoveTo);
         }
 
         public virtual void Move(Vector2 direction)
         {
-            
-            if (!hasGotTileToMoveTo)
-            {
-                currentTile.VisualizeNeighbours();
-                return;
-            }
-            else
-                currentTile.StopVisualizingNeighbours();
-                
             if (Vector2.Distance(transform.position, direction) < 0.01f)
             {
                 previousTile = currentTile;
                 currentTile = tileToMoveTo;
                 transform.parent = tileToMoveTo.transform;
+                currentTile.StopVisualizingNeighbours();
                 hasGotTileToMoveTo = false;
-                parent.ProcessAction();
+                agent.ProcessAction();
                 return;
             }
 
@@ -128,7 +114,7 @@ namespace Agents
                 directionToMoveTo = ClickOnGridInputToVector2();
 
             if(Input.GetKeyDown(KeyCode.Space))
-                parent.ProcessAction();
+                agent.ProcessAction();
         }
 
         private Vector2 ClickOnGridInputToVector2()
@@ -141,7 +127,7 @@ namespace Agents
                 Tile t = n.NeighbourTile;
                 if (t.Selected)
                 {
-                    if (t.IsOccupied || t.IsOccupiedByPlayer)
+                    if (t.Child)
                         continue;
 
                     tileToMoveTo = t;
@@ -206,7 +192,7 @@ namespace Agents
 
         private Vector3 ComputeValidityOfTileMoves(TileNeighbour t)
         {
-            if (!t.NeighbourTile || t.NeighbourTile.IsOccupied || t.NeighbourTile.IsOccupiedByPlayer)
+            if (!t.NeighbourTile || t.NeighbourTile.Child || t.NeighbourTile.Child.Type == Tile.TileType.Player)
                 return currentTile.transform.position;
 
             tileToMoveTo = t.NeighbourTile;

@@ -31,7 +31,6 @@ public class AISuperSimpleMove : MonoBehaviour, IMover
         movementSpeed = config.MovementSpeed;
         detectionSphere = transform.GetChild(0).transform;
         detectionSphere.localScale *= agent.DetectionRange + 2;
-        BindParentChildTile();
     }
 
     List<GameObject> playerPositions = new List<GameObject>();
@@ -56,9 +55,9 @@ public class AISuperSimpleMove : MonoBehaviour, IMover
         {
             try
             {
-                targetPlayer = currentTile.Neighbours.First(t => !t.NeighbourTile.IsOccupied && !t.NeighbourTile.IsOccupiedByPlayer).NeighbourTile.gameObject;
+                targetPlayer = currentTile.Neighbours.First(t => !t.NeighbourTile.Child).NeighbourTile.gameObject;
             }
-            catch(InvalidOperationException e)
+            catch(InvalidOperationException)
             {
                 agent.ProcessAction();
             }
@@ -88,7 +87,6 @@ public class AISuperSimpleMove : MonoBehaviour, IMover
             FindTileToMoveToUsingCurrentTile();
     }
 
-    Tile goT, goTParent;
     public virtual void Move(Vector2 direction)
     {
         if (!tileToMoveTo)
@@ -99,20 +97,11 @@ public class AISuperSimpleMove : MonoBehaviour, IMover
             currentTile = tileToMoveTo;
             transform.parent = tileToMoveTo.transform;
             hasFoundTileToMoveTo = false;
-            BindParentChildTile();
             agent.ProcessAction();
             return;
         }
 
         transform.position = Vector2.LerpUnclamped(transform.position, direction, movementSpeed * Time.deltaTime);
-    }
-
-    private void BindParentChildTile()
-    {
-        Tile goT = GetComponent<Tile>();
-        Tile goTParent = transform.parent.GetComponent<Tile>();
-        goT.Parent = goTParent;
-        goTParent.Child = goT;
     }
 
     private void FindTileToMoveToUsingCurrentTile()
@@ -123,7 +112,7 @@ public class AISuperSimpleMove : MonoBehaviour, IMover
             return;
 
         List<TileNeighbour> neighbours = currentTile.Neighbours;
-        var UnoccupiedTiles = neighbours.Where(n => !n.NeighbourTile.IsOccupied && !n.NeighbourTile.IsOccupiedByPlayer).ToArray();
+        var UnoccupiedTiles = neighbours.Where(n => !n.NeighbourTile.Child).ToArray();
         int unoccTilesLen = UnoccupiedTiles.Length;
         Tile chosenOne = null;
         Vector2 lowestDistanceScore = new Vector2(999, 999);

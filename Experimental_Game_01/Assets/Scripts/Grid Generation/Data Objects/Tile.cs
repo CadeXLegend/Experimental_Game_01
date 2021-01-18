@@ -27,6 +27,11 @@ namespace Generation
             BottomRightCorner =     1 << 8,              // 256
         }
 
+        public enum TileType
+        {
+            Walkable, Unwalkable, Resource, Enemy, Mystery, NPC, Player
+        };
+
         //the properties with [SerializeField] [ReadOnly] are for debugging & information purposes in the inspector
         [SerializeField]
         private List<TileNeighbour> neighbours;
@@ -35,6 +40,8 @@ namespace Generation
         [Header("Tile Information")]
         [SerializeField] [ReadOnly] private PositionOnGrid tilePositionOnGrid;
         public PositionOnGrid TilePositionOnGrid { get => tilePositionOnGrid; set => tilePositionOnGrid = value; }
+        [SerializeField] private TileType tileType;
+        public TileType Type { get => tileType; set => tileType = value; }
 
         [SerializeField] [ReadOnly] private Vector2 coordinateesOnGrid;
         public Vector2 CoordinatesOnGrid { get => coordinateesOnGrid; set => coordinateesOnGrid = value; }
@@ -45,10 +52,6 @@ namespace Generation
         public bool Highlighted { get => highlighted; }
         [SerializeField] private bool selected;
         public bool Selected { get => selected; }
-        [SerializeField] private bool isOccupied;
-        public bool IsOccupied { get => isOccupied; }
-        [SerializeField] private bool isOccupiedByPlayer;
-        public bool IsOccupiedByPlayer { get => isOccupiedByPlayer; }
 
         public void Init(PositionOnGrid _TilePositionOnGrid)
         {
@@ -65,23 +68,42 @@ namespace Generation
             OccupancyChecker();
         }
 
-        public void OccupancyChecker()
+        private void OnTransformChildrenChanged()
         {
-            if (Parent) 
-                transform.position = new Vector3(
-                    transform.position.x, 
-                    transform.position.y, 
-                    -1);
-
-            isOccupied = transform.childCount == 0 ? false : true;
-            if (!IsOccupied)
+            if (transform.childCount < 1)
             {
-                if(Highlighted && Parent)
-                    Parent.spriteRenderer.color = new Color32(255, 255, 255, 100);
-                isOccupiedByPlayer = false;
+                Child = null;
                 return;
             }
-            isOccupiedByPlayer = transform.GetChild(0).CompareTag("Player");
+
+            Child = transform.GetChild(0).GetComponent<Tile>();
+        }
+
+        private void OnTransformParentChanged()
+        {
+            if (!transform.parent)
+            {
+                Parent = null;
+                return;
+            }
+
+            Parent = transform.parent.GetComponent<Tile>();
+        }
+
+        public void OccupancyChecker()
+        {
+            if (Parent)
+                transform.position = new Vector3(
+                    transform.position.x,
+                    transform.position.y,
+                    -1);
+
+            if (Highlighted && Parent)
+                Parent.spriteRenderer.material.SetColor("_Emission", TileSettings.instance.DefaultTileColour);
+
+            if (!Child) return;
+            if (Child.Type == TileType.Player)
+                spriteRenderer.material.SetColor("_Emission", TileSettings.instance.PlayerTileColour);
         }
 
         public void AssignNeighbours(List<TileNeighbour> _neighbours)
@@ -89,75 +111,45 @@ namespace Generation
             neighbours = _neighbours;
         }
 
-        TileNeighbour.NeighbourOrientation nonoFlag =
-        (
-        TileNeighbour.NeighbourOrientation.TopLeft    |
-        TileNeighbour.NeighbourOrientation.TopRight   |
-        TileNeighbour.NeighbourOrientation.BottomLeft |
-        TileNeighbour.NeighbourOrientation.BottomRight
-        );
-
-
-        Dictionary<Tile, Color32> lastSelectedTiles = new Dictionary<Tile, Color32>();
         public virtual void VisualizeNeighbours()
         {
-            if (neighbours == null || neighbours.Count < 1) return;
+            if (Neighbours == null || Neighbours.Count < 1) return;
 
-            if (lastSelectedTiles.ContainsKey(this))
-                return;
-
-            foreach (TileNeighbour n in neighbours)
+            foreach (TileNeighbour n in Neighbours)
             {
-                Tile t = n.NeighbourTile;
-
-                //this is for if we want 4-directional movement
-                //rather than 8-directional movement
-                //if (nonoFlag.HasFlag(n.neighbourOrientation))
-                //    continue;
-
-                //if(isOccupiedByPlayer || t.isOccupiedByPlayer)
-                //    t.spriteRenderer.color = new Color32(255, 255, 255, 200);
-
-                if (!t.IsOccupied)
+                Tile nt = n.NeighbourTile;
+                nt.highlighted = true;
+                if(!nt.Child)
                 {
-                    if (!lastSelectedTiles.ContainsKey(t))
-                        lastSelectedTiles.Add(t, t.spriteRenderer.color);
-                    t.highlighted = true;
-                    t.spriteRenderer.color = new Color32(113, 255, 10, 200);
+                    nt.spriteRenderer.material.SetColor("_Emission", TileSettings.instance.WalkableTileColour);
+                    continue;
                 }
-                else
+                switch (nt.Child.tileType)
                 {
-                    if (!lastSelectedTiles.ContainsKey(t))
-                        lastSelectedTiles.Add(t, t.spriteRenderer.color);
-                    t.highlighted = true;
-                    switch (t.transform.GetChild(0).tag)
-                    {
-                        case "Enemy":
-                            t.spriteRenderer.color = new Color32(255, 108, 0, 200);
-                            break;
-                        case "Resource":
-                            t.spriteRenderer.color = new Color32(0, 255, 0, 200);
-                            break;
-                        //case "Player":
-                        //    t.spriteRenderer.color = new Color32(0, 0, 255, 100);
-                        //    break;
-                    }
+                    case TileType.Resource:
+                        nt.spriteRenderer.material.SetColor("_Emission", TileSettings.instance.ResourceTileColour);
+                        break;
+                    case TileType.Enemy:
+                        nt.spriteRenderer.material.SetColor("_Emission", TileSettings.instance.EnemyTileColour);
+                        break;
+                    case TileType.Player:
+                        nt.spriteRenderer.material.SetColor("_Emission", TileSettings.instance.PlayerTileColour);
+                        break;
                 }
             }
-            lastSelectedTiles.Add(this, spriteRenderer.color);
         }
 
         public virtual void StopVisualizingNeighbours()
         {
-            if (lastSelectedTiles == null || lastSelectedTiles.Count < 1) return;
-
-            foreach (KeyValuePair<Tile, Color32> pair in lastSelectedTiles)
+            foreach (var n in neighbours)
             {
-                pair.Key.highlighted = false;
-                pair.Key.selected = false;
-                pair.Key.spriteRenderer.color = pair.Value;
+                n.NeighbourTile.highlighted = false;
+                n.NeighbourTile.selected = false;
+                n.NeighbourTile.spriteRenderer.material.SetColor("_Emission", TileSettings.instance.DefaultTileColour);
             }
-            lastSelectedTiles.Clear();
+            spriteRenderer.material.SetColor("_Emission", TileSettings.instance.DefaultTileColour);
+            highlighted = false;
+            selected = false;
         }
 
         private void OnMouseOver()
@@ -182,22 +174,23 @@ namespace Generation
 
         private void OnMouseUp()
         {
-            switch (tag)
+            switch (tileType)
             {
-                case "Resource":
+                case TileType.Resource:
                     if (!Parent) return;
                     if (!Parent.Highlighted) return;
                     selected = true;
                     Agents.Agent agent = null;
                     foreach (var neighbour in Parent.Neighbours)
-                        if (neighbour.NeighbourTile.IsOccupiedByPlayer)
-                            agent = neighbour.NeighbourTile.transform.GetChild(0).GetComponent<Agents.Agent>();
+                        if(neighbour.NeighbourTile.Child)
+                            if (neighbour.NeighbourTile.Child.Type == TileType.Player)
+                                agent = neighbour.NeighbourTile.transform.GetChild(0).GetComponent<Agents.Agent>();
                     int loot = UnityEngine.Random.Range(1, 2);
                     ActionButtons.instance.SetGatherNodeAndAmount("lumber", loot);
                     ActionButtons.instance.SetGatherNodeRef(gameObject, agent);
-                    Parent.spriteRenderer.color = new Color32(113, 255, 10, 200);
+                    Parent.spriteRenderer.material.SetColor("_Emission", TileSettings.instance.WalkableTileColour);
                     break;
-                case "Enemy":
+                case TileType.Enemy:
                     selected = true;
                     break;
                 default:
@@ -210,36 +203,36 @@ namespace Generation
 
         private void SetActionButtonOn()
         {
-            switch (tag)
+            switch (tileType)
             {
-                case "Resource":
+                case TileType.Resource:
                     ActionButtons.instance.EnableActionButton(_actionType: ActionButtons.ActionType.Gather);
                     break;
-                case "Enemy":
+                case TileType.Enemy:
                     ActionButtons.instance.EnableActionButton(_actionType: ActionButtons.ActionType.Attack);
                     break;
-                case "Investigate":
+                case TileType.Mystery:
                     ActionButtons.instance.EnableActionButton(_actionType: ActionButtons.ActionType.Investigate);
                     break;
-                case "Talk":
+                case TileType.NPC:
                     ActionButtons.instance.EnableActionButton(_actionType: ActionButtons.ActionType.Talk);
                     break;
             }
         }
         private void SetActionButtonOff()
         {
-            switch (tag)
+            switch (tileType)
             {
-                case "Resource":
+                case TileType.Resource:
                     ActionButtons.instance.DisableActionButton(_actionType: ActionButtons.ActionType.Gather);
                     break;
-                case "Enemy":
+                case TileType.Enemy:
                     ActionButtons.instance.DisableActionButton(_actionType: ActionButtons.ActionType.Attack);
                     break;
-                case "Investigate":
+                case TileType.Mystery:
                     ActionButtons.instance.DisableActionButton(_actionType: ActionButtons.ActionType.Investigate);
                     break;
-                case "Talk":
+                case TileType.NPC:
                     ActionButtons.instance.DisableActionButton(_actionType: ActionButtons.ActionType.Talk);
                     break;
             }

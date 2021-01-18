@@ -73,9 +73,9 @@ public class GenerateResources : MonoBehaviour
         radiusCovered++;
         foreach (TileNeighbour n in currentNeighbourDepth)
         {
-            if (n.NeighbourTile.IsOccupied)
+            if (n.NeighbourTile.Child)
             {
-                if (n.NeighbourTile.transform.GetChild(0).tag == "Resource")
+                if (n.NeighbourTile.Type == Tile.TileType.Resource)
                     resourceCountWithinRadiusCovered++;
             }
             else

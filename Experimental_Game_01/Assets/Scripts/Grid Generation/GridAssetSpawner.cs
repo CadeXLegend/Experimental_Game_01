@@ -238,6 +238,7 @@ namespace Generation
 #endif
             go.tag = "Resource";
             Tile decoT = go.GetComponent<Tile>();
+            decoT.Type = Tile.TileType.Resource;
             decoT.Parent = t;
             t.Child = decoT;
             //BoxCollider2D collider = go.AddComponent<BoxCollider2D>();
@@ -281,6 +282,7 @@ namespace Generation
                 Tile decoT = go.GetComponent<Tile>();
                 decoT.Parent = t;
                 t.Child = decoT;
+                decoT.Type = Tile.TileType.Resource;
                 //BoxCollider2D collider = go.AddComponent<BoxCollider2D>();
                 //collider.size = gridAssets.Themes[(int)theme].TileDecorations[0].ColliderSize;
                 SpriteRenderer sr = go.GetComponent<SpriteRenderer>();

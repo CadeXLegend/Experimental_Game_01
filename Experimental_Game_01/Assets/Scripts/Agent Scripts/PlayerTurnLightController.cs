@@ -11,7 +11,7 @@ public class PlayerTurnLightController : MonoBehaviour
     {
         light = transform.GetChild(0).gameObject;
         agent = GetComponent<Agent>();
-        AgentTurnSetter.OnAgentTurn += () =>
+        AgentTurnSetter.OnAgentTurnStarted += () =>
         {
             light.SetActive(AgentTurnSetter.IsCurrentAgent(agent));
         };

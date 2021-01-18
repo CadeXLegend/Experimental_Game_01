@@ -10,6 +10,8 @@ namespace Generation
     /// </summary>
     public class GridAssetSpawner : MonoBehaviour
     {
+        [SerializeField]
+        private Material decorationsMat;
         public delegate void GridAssetSpawningHandler();
         /// <summary>
         /// Called every time an asset is spawned.
@@ -258,6 +260,7 @@ namespace Generation
         /// <param name="gridContainer">Parent for the instantiated assets</param>
         public virtual List<GameObject> SpawnTileDecorations(Grid grid, string assetName, Tile.PositionOnGrid positionOnGrid, GridAssetTheme.Theme theme, float spawnRate = 0.1f)
         {
+            GameActionsLogger.instance.LogAction("Spawning foliage...");
             List<GameObject> goArray = new List<GameObject>();
 
             Array.ForEach(grid.TileGrid, (column, row) =>
@@ -285,9 +288,11 @@ namespace Generation
                 go.transform.localScale *= gridAssets.Themes[(int)theme].TileDecorations[0].SpriteScale;
                 sr.sortingOrder = 1;
                 sr.gameObject.layer = 7;
+                sr.material = decorationsMat;
                 SpawningAssets?.Invoke();
                 goArray.Add(go);
             });
+            GameActionsLogger.instance.LogAction("Foliage spawned successfully");
             AssetsSpawned?.Invoke();
             return goArray;
         }

@@ -3,7 +3,7 @@ using System;
 using System.Linq;
 using UnityEngine;
 
-namespace Agent
+namespace Agents
 {
     /// <summary>
     /// Moves the Agent from Input Received.

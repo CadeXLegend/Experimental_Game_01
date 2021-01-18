@@ -11,7 +11,7 @@ public class SpawnAgentOverTime : MonoBehaviour
     [SerializeField]
     private GameObject agentToSpawn;
     [SerializeField]
-    private Agent.AgentConfig agentConfig;
+    private Agents.AgentConfig agentConfig;
     private Tile currentTile;
     private int amountOfAgentsSpawned = 0;
 
@@ -54,7 +54,7 @@ public class SpawnAgentOverTime : MonoBehaviour
 
             if(!go.CompareTag("Enemy"))
                 go.tag = "Enemy";
-            Agent.Agent spawnedAgent = go.GetComponent<Agent.Agent>();
+            Agents.Agent spawnedAgent = go.GetComponent<Agents.Agent>();
             AISuperSimpleMove aiMover = go.AddComponent<AISuperSimpleMove>();
             spawnedAgent.Init(agentConfig, aiMover);
             aiMover.Init(spawnedAgent, agentConfig, go.transform.parent.GetComponent<Tile>());

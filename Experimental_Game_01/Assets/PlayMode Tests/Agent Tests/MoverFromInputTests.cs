@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
-using Agent;
+using Agents;
 
 namespace Tests
 {
@@ -20,7 +20,7 @@ namespace Tests
             config.MovementSpeed = 1;
             config.UsesRigidbody2D = true;
             GameObject go = new GameObject();
-            Agent.Agent agent = go.AddComponent<Agent.Agent>();
+            Agents.Agent agent = go.AddComponent<Agents.Agent>();
             go.AddComponent<Rigidbody2D>();
             MoverFromInput mover = go.AddComponent<MoverFromInput>();
             mover.Init(agent, config);

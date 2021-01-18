@@ -87,6 +87,7 @@ namespace Generation
             if (assetSpawner == null)
                 throw new UnassignedReferenceException($"Grid Asset Spawner is not assigned (on {this.name})");
 
+            GameActionsLogger.instance.LogAction("World is being generated");
             OnMapGenerating?.Invoke();
             switch (mapType)
             {
@@ -113,6 +114,7 @@ namespace Generation
                         Camera.main.transform.position = customPivot;
                         break;
                 }
+            GameActionsLogger.instance.LogAction("World generated successfully");
             OnMapGenerated?.Invoke();
         }
     }

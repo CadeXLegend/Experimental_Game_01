@@ -1,7 +1,7 @@
 ﻿using MyBox;
 using UnityEngine;
 
-namespace Agent
+namespace Agents
 {
 
     /// <summary>

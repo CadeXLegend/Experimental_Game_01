@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Agents;
+using System;
 
 namespace TurnManagement
 {
@@ -10,15 +12,17 @@ namespace TurnManagement
         [SerializeField]
         private Generation.MapGenerator mapGenerator;
         //All the agents active in the Game
-        private static List<Agent.Agent> agents = new List<Agent.Agent>();
+        private static List<Agent> agents = new List<Agent>();
         //the current agent for the current turn tick
-        private int currentAgent = 0;
+        private static int currentAgent = 0;
         //how many actions the current agent can take
         private int currentAgentsActionsPerTurn = 0;
         //how many actions the current agent has taken in this turn
         private int currentAgentsTakenActions = 0;
         //can the current agent do actions?
         bool currentAgentCanDoActions = false;
+        public static Action OnAgentTurn;
+        public static Action OnAgentTurnEnded;
 
         private void Start()
         {
@@ -30,10 +34,12 @@ namespace TurnManagement
             ProcessAgentTurns();
         }
 
-        public static void AddAgentToStateMachine(Agent.Agent agent)
+        public static void AddAgentToStateMachine(Agent agent)
         {
             agents.Add(agent);
         }
+
+        public static bool IsCurrentAgent(Agent sender) => sender == agents[currentAgent] ? true : false;
 
         private void ProcessAgentTurns()
         {
@@ -48,11 +54,14 @@ namespace TurnManagement
             currentAgentCanDoActions = currentAgentsTakenActions < currentAgentsActionsPerTurn;
 
             agents[currentAgent].CanDoActions = currentAgentCanDoActions;
+            OnAgentTurn?.Invoke();
             if (!currentAgentCanDoActions)
             {
                 //Debug.Log($"<b>Agent: {agents[currentAgent].name}</b> just finished their turn.");
+                //GameActionsLogger.instance.LogAction($"<b>Agent: {agents[currentAgent].name}</b> just finished their turn.");
                 currentAgent++;
                 TurnTicker.Tick();
+                OnAgentTurnEnded?.Invoke();
             }
 
         }

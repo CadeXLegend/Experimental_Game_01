@@ -4,7 +4,7 @@ using UnityEngine;
 using MyBox;
 using System;
 
-namespace Agent
+namespace Agents
 {
     [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(SpriteRenderer))]
@@ -151,8 +151,6 @@ namespace Agent
         {
             if (!(specialType == AgentSpecialType.Druid))
                 return;
-
-            //resourcesGenerator.Generate();
 
             if (!CanDoActions)
                 return;

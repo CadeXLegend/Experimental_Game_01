@@ -1,14 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Agent;
+using Agents;
 using Generation;
 using System.Linq;
 using System;
 
 public class AISuperSimpleMove : MonoBehaviour, IMover
 {
-    private Agent.Agent agent;
+    private Agents.Agent agent;
     private AgentConfig config;
     [SerializeField]
     private Tile lastTileWasOn;
@@ -23,7 +23,7 @@ public class AISuperSimpleMove : MonoBehaviour, IMover
     private float movementSpeed;
     private Transform detectionSphere;
 
-    public void Init(Agent.Agent _agent, AgentConfig _config, Tile _currentTile)
+    public void Init(Agents.Agent _agent, AgentConfig _config, Tile _currentTile)
     {
         config = _config;
         currentTile = _currentTile;

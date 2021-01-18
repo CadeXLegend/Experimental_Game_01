@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Agent
+namespace Agents
 {
     /// <summary>
     /// ScriptableObject containing Entities.

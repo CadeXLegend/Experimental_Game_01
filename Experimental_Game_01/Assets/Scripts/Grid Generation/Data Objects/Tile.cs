@@ -67,6 +67,12 @@ namespace Generation
 
         public void OccupancyChecker()
         {
+            if (Parent) 
+                transform.position = new Vector3(
+                    transform.position.x, 
+                    transform.position.y, 
+                    -1);
+
             isOccupied = transform.childCount == 0 ? false : true;
             if (!IsOccupied)
             {
@@ -109,12 +115,15 @@ namespace Generation
                 //if (nonoFlag.HasFlag(n.neighbourOrientation))
                 //    continue;
 
+                //if(isOccupiedByPlayer || t.isOccupiedByPlayer)
+                //    t.spriteRenderer.color = new Color32(255, 255, 255, 200);
+
                 if (!t.IsOccupied)
                 {
                     if (!lastSelectedTiles.ContainsKey(t))
                         lastSelectedTiles.Add(t, t.spriteRenderer.color);
                     t.highlighted = true;
-                    t.spriteRenderer.color = new Color32(255, 255, 255, 100);
+                    t.spriteRenderer.color = new Color32(113, 255, 10, 200);
                 }
                 else
                 {
@@ -124,14 +133,14 @@ namespace Generation
                     switch (t.transform.GetChild(0).tag)
                     {
                         case "Enemy":
-                            t.spriteRenderer.color = new Color32(255, 0, 0, 200);
+                            t.spriteRenderer.color = new Color32(255, 108, 0, 200);
                             break;
                         case "Resource":
                             t.spriteRenderer.color = new Color32(0, 255, 0, 200);
                             break;
-                        case "Player":
-                            t.spriteRenderer.color = new Color32(0, 0, 255, 100);
-                            break;
+                        //case "Player":
+                        //    t.spriteRenderer.color = new Color32(0, 0, 255, 100);
+                        //    break;
                     }
                 }
             }
@@ -179,14 +188,14 @@ namespace Generation
                     if (!Parent) return;
                     if (!Parent.Highlighted) return;
                     selected = true;
-                    Agent.Agent agent = null;
+                    Agents.Agent agent = null;
                     foreach (var neighbour in Parent.Neighbours)
                         if (neighbour.NeighbourTile.IsOccupiedByPlayer)
-                            agent = neighbour.NeighbourTile.transform.GetChild(0).GetComponent<Agent.Agent>();
+                            agent = neighbour.NeighbourTile.transform.GetChild(0).GetComponent<Agents.Agent>();
                     int loot = UnityEngine.Random.Range(1, 2);
                     ActionButtons.instance.SetGatherNodeAndAmount("lumber", loot);
                     ActionButtons.instance.SetGatherNodeRef(gameObject, agent);
-                    Parent.spriteRenderer.color = new Color32(255, 255, 255, 100);
+                    Parent.spriteRenderer.color = new Color32(113, 255, 10, 200);
                     break;
                 case "Enemy":
                     selected = true;

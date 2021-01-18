@@ -5,7 +5,7 @@ public class AgentHealthBar : MonoBehaviour
 {
     [SerializeField]
     private Slider healthSlider;
-    [SerializeField] private Agent.Agent agent;
+    [SerializeField] private Agents.Agent agent;
 
     private void Start()
     {

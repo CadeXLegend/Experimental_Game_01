@@ -7,7 +7,7 @@
 
 ![Image of Game as of 15-Jan-2021](https://i.imgur.com/h9glcD9.jpg)
 ![](https://i.imgur.com/YquKU7I.gif)
-<iframe width="1903" height="800" src="https://www.youtube.com/embed/AOyROyHkBFU" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+[![19-Jan-21 Update](https://i.imgur.com/kz6VJRJ.png)](https://www.youtube.com/watch?v=AOyROyHkBFU "Experimental Game 01 - 19-Jan: Update Experiment")
 
 Creating a game to experiment with code techniques, improve on knowledge, workflow, and to have fun while doing so!
 

@@ -5,8 +5,6 @@
 ![Discord Server](https://img.shields.io/discord/133525034298900480?label=Personal%20Server&logo=Discord)
 ![Last Commit](https://img.shields.io/github/last-commit/CadeXLegend/Experimental_Game_01?label=Last%20Commit)
 
-![Image of Game as of 15-Jan-2021](https://i.imgur.com/h9glcD9.jpg)
-![](https://i.imgur.com/YquKU7I.gif)
 [![19-Jan-21 Update](https://i.imgur.com/kz6VJRJ.png)](https://www.youtube.com/watch?v=AOyROyHkBFU "Experimental Game 01 - 19-Jan: Update Experiment")
 
 Creating a game to experiment with code techniques, improve on knowledge, workflow, and to have fun while doing so!
